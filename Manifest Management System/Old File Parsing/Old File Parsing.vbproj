@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CC95033C-1DEA-4D0F-AE78-431DC693D3C6}</ProjectGuid>
+    <ProjectGuid>{F6ED8178-9B02-4422-A59B-B998641FAB80}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Manifest_Management_System.My.MyApplication</StartupObject>
-    <RootNamespace>Manifest_Management_System</RootNamespace>
-    <AssemblyName>Manifest Management System</AssemblyName>
+    <StartupObject>Old_File_Parsing.My.MyApplication</StartupObject>
+    <RootNamespace>Old_File_Parsing</RootNamespace>
+    <AssemblyName>Old File Parsing</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -21,7 +21,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>Manifest Management System.xml</DocumentationFile>
+    <DocumentationFile>Old File Parsing.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -31,7 +31,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>Manifest Management System.xml</DocumentationFile>
+    <DocumentationFile>Old File Parsing.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -72,11 +72,11 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmSortNew.vb">
+    <Compile Include="frmParse.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmSortNew.Designer.vb">
-      <DependentUpon>frmSortNew.vb</DependentUpon>
+    <Compile Include="frmParse.Designer.vb">
+      <DependentUpon>frmParse.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -96,8 +96,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmSortNew.resx">
-      <DependentUpon>frmSortNew.vb</DependentUpon>
+    <EmbeddedResource Include="frmParse.resx">
+      <DependentUpon>frmParse.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
