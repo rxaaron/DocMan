@@ -22,21 +22,12 @@ Partial Class frmParse
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.listFileNames = New System.Windows.Forms.ListView()
         Me.fbdOldFiles = New System.Windows.Forms.FolderBrowserDialog()
         Me.txtFilePath = New System.Windows.Forms.TextBox()
         Me.btnFileBrowse = New System.Windows.Forms.Button()
         Me.btnParseNames = New System.Windows.Forms.Button()
+        Me.txtErrors = New System.Windows.Forms.RichTextBox()
         Me.SuspendLayout()
-        '
-        'listFileNames
-        '
-        Me.listFileNames.Location = New System.Drawing.Point(12, 56)
-        Me.listFileNames.Name = "listFileNames"
-        Me.listFileNames.Size = New System.Drawing.Size(1255, 715)
-        Me.listFileNames.TabIndex = 0
-        Me.listFileNames.UseCompatibleStateImageBehavior = False
-        Me.listFileNames.View = System.Windows.Forms.View.Details
         '
         'fbdOldFiles
         '
@@ -67,15 +58,23 @@ Partial Class frmParse
         Me.btnParseNames.Text = "Parse Names"
         Me.btnParseNames.UseVisualStyleBackColor = True
         '
+        'txtErrors
+        '
+        Me.txtErrors.Location = New System.Drawing.Point(13, 39)
+        Me.txtErrors.Name = "txtErrors"
+        Me.txtErrors.Size = New System.Drawing.Size(595, 683)
+        Me.txtErrors.TabIndex = 4
+        Me.txtErrors.Text = ""
+        '
         'frmParse
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1279, 783)
+        Me.ClientSize = New System.Drawing.Size(623, 731)
+        Me.Controls.Add(Me.txtErrors)
         Me.Controls.Add(Me.btnParseNames)
         Me.Controls.Add(Me.btnFileBrowse)
         Me.Controls.Add(Me.txtFilePath)
-        Me.Controls.Add(Me.listFileNames)
         Me.Name = "frmParse"
         Me.ShowIcon = False
         Me.Text = "Old File Sorter"
@@ -83,10 +82,9 @@ Partial Class frmParse
         Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents listFileNames As ListView
     Friend WithEvents fbdOldFiles As FolderBrowserDialog
     Friend WithEvents txtFilePath As TextBox
     Friend WithEvents btnFileBrowse As Button
     Friend WithEvents btnParseNames As Button
+    Friend WithEvents txtErrors As RichTextBox
 End Class
