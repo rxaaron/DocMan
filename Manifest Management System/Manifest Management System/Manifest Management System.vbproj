@@ -95,6 +95,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="RxConnect.vb" />
+    <Compile Include="RxTransaction.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmSortNew.resx">
