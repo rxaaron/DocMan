@@ -22,13 +22,65 @@ Public Class RxTransaction
     ''' <summary>
     ''' New instance of the class requires an SqlConnection be specified to simplify later code.
     ''' </summary>
-    ''' <param name="SQLConnection">The required SqlConnection</param>
-    Public Sub New(ByVal SQLConnection As SqlConnection)
+    ''' <param name="SQLConnection">The required SqlConnection.</param>
+    ''' <param name="FilePath">The location of the current file being worked.</param>
+    Public Sub New(ByVal SQLConnection As SqlConnection, ByVal FilePath As String)
         Connection = SQLConnection
+        FileLocation = FilePath
     End Sub
 
 
+    ''' <summary>
+    ''' New instance of the class requires an SqlConnection be specified to simplify later code.
+    ''' </summary>
+    ''' <param name="SQLConnection">The required SqlConnection.</param>
+    ''' <param name="RowID">The ID corresponding to the file being worked.</param>
+    Public Sub New(ByVal SQLConnection As SqlConnection, ByVal RowID As Integer)
+        Connection = SQLConnection
+
+    End Sub
+
+    Private FileLocation As String
+    ''' <summary>
+    ''' Location of File being worked by this transaction.
+    ''' </summary>
+    ''' <returns>Filepath as string.</returns>
+    Public Property File As String
+        Get
+            Return FileLocation
+        End Get
+        Set(value As String)
+            FileLocation = value
+            RowID = GetRowIDFromFilePath(value)
+        End Set
+    End Property
+
+    Private RowID As Integer
+    ''' <summary>
+    ''' Database ID from the active row.
+    ''' </summary>
+    ''' <returns>Integer value from the row.</returns>
+    Public Property FileID As Integer
+        Get
+            Return RowID
+        End Get
+        Set(value As Integer)
+            RowID = value
+        End Set
+    End Property
 
 
+    Private Function GetRowIDFromFilePath(ByVal FilePath As String) As Integer
+
+        Dim da As New SqlDataAdapter
+        Dim slct As New SqlCommand("SELECT ID FROM ManifestData WHERE FileLocation = @FilePath;", Connection)
+        da.SelectCommand = slct
+        slct.Parameters.Add("@FilePath", SqlDbType.VarChar)
+        slct.Parameters("@FilePath").Value = FilePath
+        Dim ds As New DataSet
+        da.Fill(ds, "ManifestData")
+        Return ds.Tables(0).Rows(0).Item(0)
+
+    End Function
 
 End Class

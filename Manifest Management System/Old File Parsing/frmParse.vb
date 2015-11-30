@@ -11,8 +11,7 @@ Public Class frmParse
 
     Private Sub btnParseNames_Click(sender As Object, e As EventArgs) Handles btnParseNames.Click, btnFileBrowse.Click
         Dim jim As New ParseAndPaste
-        txtErrors.AppendText(jim.ParseFile("Q:\Manifests\Received", 1))
-        txtErrors.AppendText(jim.ParseFile("Q:\Manifests\Sent", 2))
+        txtErrors.AppendText(jim.ParseFile("M:\OldPMSents"))
     End Sub
 
     'Private Sub ParseFiles(filename As String)

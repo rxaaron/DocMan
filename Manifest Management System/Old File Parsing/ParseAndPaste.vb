@@ -7,11 +7,12 @@ Imports iTextSharp.text.pdf
 Public Class ParseAndPaste
     Dim MyConnection As New RxConnect("10.10.50.179", "ENCORE", "1776", "ManifestManager", "gmapuser", "Password1")
 
-    Public Function ParseFile(ByVal StartDirectory As String, ByVal Routing As Integer) As String
+    Public Function ParseFile(ByVal StartDirectory As String) As String
         Dim totalstring As String = ""
         Try
 
             Dim Splitters() As String = {" ", "_"}
+            Dim SentReceived() As String = {"Sent", "Received"}
             Dim facilitypossibility As New SqlDataAdapter
             Dim selectfacpos As New SqlCommand
             facilitypossibility.SelectCommand = selectfacpos
@@ -46,8 +47,6 @@ Public Class ParseAndPaste
             insert.Parameters.Add("@cycle", SqlDbType.Bit)
             insert.Parameters.Add("@routing", SqlDbType.Int)
             insert.Parameters.Add("@keys", SqlDbType.VarChar)
-            'Add sent received parameters due to data changes.
-            insert.Parameters("@routing").Value = Routing
 
             For Each fullfilename As String In Directory.GetFiles(StartDirectory, "*.pdf")
 
@@ -56,7 +55,7 @@ Public Class ParseAndPaste
                 Dim IsCycle As Boolean = False
                 Dim FillDate As String = "01/01/1900"
                 Dim Keywords As String = ""
-                Dim SentReceived As Integer = 2
+                Dim Routing As Integer = 3
                 Dim filename As String = Path.GetFileNameWithoutExtension(fullfilename)
                 Dim words() As String = filename.Split(Splitters, StringSplitOptions.RemoveEmptyEntries)
                 For Each word As String In words
@@ -84,18 +83,28 @@ Public Class ParseAndPaste
                     If Date.TryParse(word, datevalue) = True Then
                         FillDate = datevalue.ToShortDateString
                     End If
+                    For Each sr As String In SentReceived
+                        If word.Equals(sr, StringComparison.OrdinalIgnoreCase) = True Then
+                            If sr.Equals("sent", StringComparison.OrdinalIgnoreCase) = True Then
+                                Routing = 2
+                            ElseIf sr.Equals("received", StringComparison.OrdinalIgnoreCase) = True Then
+                                Routing = 1
+                            End If
+                        End If
+                    Next
                 Next
                 Dim reader As New PdfReader(fullfilename)
                 Dim index As Boolean = reader.Info.TryGetValue("Keywords", Keywords)
                 insert.Parameters("@keys").Value = Keywords
                 If index = False Then
-                    insert.Parameters("@keys").Value = vbNull
+                    insert.Parameters("@keys").Value = DBNull.Value
                 End If
                 insert.Parameters("@filelocation").Value = fullfilename
                 insert.Parameters("@facility").Value = Facility
                 insert.Parameters("@controls").Value = IsControls
                 insert.Parameters("@ddate").Value = FillDate
                 insert.Parameters("@cycle").Value = IsCycle
+                insert.Parameters("@routing").Value = Routing
                 Try
                     insert.ExecuteNonQuery()
                 Catch ex1 As Exception
