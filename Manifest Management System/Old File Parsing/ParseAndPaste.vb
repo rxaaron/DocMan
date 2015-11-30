@@ -8,8 +8,9 @@ Public Class ParseAndPaste
     Dim MyConnection As New RxConnect("10.10.50.179", "ENCORE", "1776", "ManifestManager", "gmapuser", "Password1")
 
     Public Function ParseFile(ByVal StartDirectory As String, ByVal Routing As Integer) As String
+        Dim totalstring As String = ""
         Try
-            Dim totalstring As String = ""
+
             Dim Splitters() As String = {" ", "_"}
             Dim facilitypossibility As New SqlDataAdapter
             Dim selectfacpos As New SqlCommand
@@ -45,16 +46,17 @@ Public Class ParseAndPaste
             insert.Parameters.Add("@cycle", SqlDbType.Bit)
             insert.Parameters.Add("@routing", SqlDbType.Int)
             insert.Parameters.Add("@keys", SqlDbType.VarChar)
-
+            'Add sent received parameters due to data changes.
             insert.Parameters("@routing").Value = Routing
 
-            For Each fullfilename As String In Directory.GetFiles(StartDirectory, "*.pdf", SearchOption.AllDirectories)
+            For Each fullfilename As String In Directory.GetFiles(StartDirectory, "*.pdf")
 
                 Dim Facility As Integer = 20
                 Dim IsControls As Boolean = False
                 Dim IsCycle As Boolean = False
                 Dim FillDate As String = "01/01/1900"
                 Dim Keywords As String = ""
+                Dim SentReceived As Integer = 2
                 Dim filename As String = Path.GetFileNameWithoutExtension(fullfilename)
                 Dim words() As String = filename.Split(Splitters, StringSplitOptions.RemoveEmptyEntries)
                 For Each word As String In words
@@ -94,14 +96,17 @@ Public Class ParseAndPaste
                 insert.Parameters("@controls").Value = IsControls
                 insert.Parameters("@ddate").Value = FillDate
                 insert.Parameters("@cycle").Value = IsCycle
+                Try
+                    insert.ExecuteNonQuery()
+                Catch ex1 As Exception
+                    totalstring = totalstring & Facility.ToString & " " & IsControls & " " & IsCycle & " " & FillDate & " " & fullfilename & ex1.Message & Chr(13)
+                End Try
 
-                insert.ExecuteNonQuery()
-                totalstring = totalstring & Facility.ToString & " " & IsControls & " " & IsCycle & " " & FillDate & " " & fullfilename & Chr(13)
             Next
 
             Return totalstring
-        Catch ex As Exception
-            Return ex.Message
+        Catch ex2 As Exception
+            Return totalstring & ex2.Message
         End Try
 
         MyConnection.CloseConnection()
