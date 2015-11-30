@@ -83,4 +83,41 @@ Public Class RxTransaction
 
     End Function
 
+    Public Function UpdateRecord(ByVal Facility As Integer, ByVal Controls As Boolean, ByVal FillDate As String, ByVal Cycle As Boolean, ByVal Routing As Integer, ByVal KeyWords As String) As Boolean
+        Dim da As New SqlDataAdapter
+        Dim update As New SqlCommand("UPDATE ManifestData SET Facility = @facility, Controls = @controls, DeliveryDate = @filldate, Cycle = @cycle, Routing = @routing, AssociatedKeywords = @keywords, Verified = @verified, VerifyingUser = @verifyinguser WHERE ID = @ID;", Connection)
+        With update.Parameters
+            .Add("@facility", SqlDbType.Int)
+            .Add("@controls", SqlDbType.Bit)
+            .Add("@filldate", SqlDbType.VarChar)
+            .Add("@cycle", SqlDbType.Bit)
+            .Add("@routing", SqlDbType.Int)
+            .Add("@keywords", SqlDbType.VarChar)
+            .Add("@verified", SqlDbType.Bit)
+            .Add("@verifyinguser", SqlDbType.VarChar)
+            .Add("@ID", SqlDbType.Int)
+        End With
+        With update
+            .Parameters("@facility").Value = Facility
+            .Parameters("@controls").Value = Controls
+            .Parameters("@filldate").Value = FillDate
+            .Parameters("@cycle").Value = Cycle
+            .Parameters("@routing").Value = Routing
+            .Parameters("@keywords").Value = KeyWords
+            .Parameters("@verified").Value = True
+            .Parameters("@verifyinguser").Value = Environment.UserName
+            .Parameters("@ID").Value = RowID
+        End With
+
+        Try
+            update.ExecuteNonQuery()
+
+        Catch ex As Exception
+            Return False
+            Exit Function
+        End Try
+
+        Return True
+    End Function
+
 End Class
