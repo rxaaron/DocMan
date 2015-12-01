@@ -26,6 +26,9 @@ Partial Class frmSortNew
         Me.listFiles = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.pdfViewer = New System.Windows.Forms.WebBrowser()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'btnRefresh
@@ -63,11 +66,37 @@ Partial Class frmSortNew
         Me.pdfViewer.Size = New System.Drawing.Size(968, 685)
         Me.pdfViewer.TabIndex = 3
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(541, 12)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 4
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(737, 12)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(100, 20)
+        Me.TextBox1.TabIndex = 5
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Location = New System.Drawing.Point(737, 38)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(100, 20)
+        Me.TextBox2.TabIndex = 5
+        '
         'frmSortNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1350, 788)
+        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.pdfViewer)
         Me.Controls.Add(Me.listFiles)
         Me.Controls.Add(Me.btnRefresh)
@@ -75,10 +104,14 @@ Partial Class frmSortNew
         Me.ShowIcon = False
         Me.Text = "Manifest Sorter"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents btnRefresh As Button
     Friend WithEvents listFiles As ListView
     Friend WithEvents ColumnHeader1 As ColumnHeader
     Friend WithEvents pdfViewer As WebBrowser
+    Friend WithEvents Button1 As Button
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents TextBox2 As TextBox
 End Class

@@ -10,22 +10,39 @@ Public Class KeywordReader
     Public Function ParseKeywords(ByVal FileLocation As String) As Dictionary(Of String, String)
         Dim Storage As New Dictionary(Of String, String)
         Dim Keys As String = GetKeywords(FileLocation)
+        Dim Facility As String = "20"
+        Dim Routing As String = "3"
+        Dim IsControls As String = "False"
+        Dim Failed As String = "Failed"
 
-        Dim Words() As String = Keys.Split(";")
-        For Each word As String In Words
-            Dim NoQuotes As String = word.Remove(0, 1)
-            NoQuotes = NoQuotes.Remove(NoQuotes.Length - 1, 1)
-            Dim SeparateWords() As String = NoQuotes.Split(",")
-            For Each IndividualWord As String In SeparateWords
-                Storage.Add("Facility", FindFacility(IndividualWord))
-                Storage.Add("Routing", FindRouting(IndividualWord))
-                Storage.Add("Controls", FindControls(IndividualWord))
+        If String.IsNullOrEmpty(Keys) = False Then
+            Dim Words() As String = Keys.Split(CType(";", Char()))
+            For Each word As String In Words
+                Dim SomeQuotes As String = word.Replace(" ", String.Empty)
+                Dim NoQuotes As String = SomeQuotes.Replace(ControlChars.Quote, String.Empty)
+                Dim SeparateWords() As String = NoQuotes.Split(CType(",", Char()))
+                For Each IndividualWord As String In SeparateWords
+                    If Failed.Equals(FindFacility(IndividualWord), StringComparison.OrdinalIgnoreCase) = False Then
+                        Facility = FindFacility(IndividualWord)
+                    End If
+                    If Failed.Equals(FindRouting(IndividualWord), StringComparison.OrdinalIgnoreCase) = False Then
+                        Routing = FindRouting(IndividualWord)
+                    End If
+                    If Failed.Equals(FindControls(IndividualWord), StringComparison.OrdinalIgnoreCase) = False Then
+                        IsControls = FindControls(IndividualWord)
+                    End If
+
+                Next
             Next
-        Next
 
-        Storage.Add("FillDate", File.GetCreationTime(FileLocation).ToShortDateString)
-
+            Storage.Add("Routing", Routing)
+            Storage.Add("Controls", IsControls)
+            Storage.Add("Facility", Facility)
+            Storage.Add("FillDate", File.GetCreationTime(FileLocation).ToShortDateString)
+            Storage.Add("Keywords", Keys)
+        End If
         Return Storage
+
     End Function
 
     Private Function GetKeywords(ByVal FileLocation As String) As String
@@ -37,8 +54,8 @@ Public Class KeywordReader
         Return KeyWords
     End Function
 
-    Private Function FindFacility(ByVal Word As String) As Integer
-        Dim Facility As Integer = 20
+    Private Function FindFacility(ByVal Word As String) As String
+        Dim Facility As String = "Failed"
 
         Dim SQL As New RxConnect("gmap-server", "ENCORE", "1776", "ManifestManager", "gmapuser", "Password1")
         Dim da As New SqlDataAdapter
@@ -49,7 +66,7 @@ Public Class KeywordReader
 
         For Each drow As DataRow In Facilities.Tables(0).Rows
             If Word.Equals(drow.Item(0).ToString, StringComparison.OrdinalIgnoreCase) = True Then
-                Facilities = drow.Item(1)
+                Facility = drow.Item(1).ToString
             End If
         Next
 
@@ -57,20 +74,20 @@ Public Class KeywordReader
         Return Facility
     End Function
 
-    Private Function FindRouting(ByVal Word As String) As Integer
-        Dim Routing As Integer = 3
+    Private Function FindRouting(ByVal Word As String) As String
+        Dim Routing As String = "Failed"
 
         If Word.Equals("sent", StringComparison.OrdinalIgnoreCase) = True Then
-            Routing = 2
+            Routing = "2"
         ElseIf Word.Equals("received", StringComparison.OrdinalIgnoreCase) = True
-            Routing = 1
+            Routing = "1"
         End If
 
         Return Routing
     End Function
 
-    Private Function FindControls(ByVal Word As String) As Boolean
-        Dim IsControls As Boolean = False
+    Private Function FindControls(ByVal Word As String) As String
+        Dim IsControls As String = "Failed"
 
         Dim SQL As New RxConnect("gmap-server", "ENCORE", "1776", "ManifestManager", "gmapuser", "Password1")
         Dim da As New SqlDataAdapter
@@ -81,7 +98,7 @@ Public Class KeywordReader
 
         For Each drow As DataRow In Controls.Tables(0).Rows
             If Word.Equals(drow.Item(0).ToString, StringComparison.OrdinalIgnoreCase) = True Then
-                IsControls = True
+                IsControls = "True"
             End If
         Next
 

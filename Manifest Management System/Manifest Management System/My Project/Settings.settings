@@ -1,7 +1,36 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" UseMySettingsClassName="true">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="NewManifestLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">O:\</Value>
+    </Setting>
+    <Setting Name="PermanentManifestLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">M:\RecentFiles\</Value>
+    </Setting>
+    <Setting Name="SQLServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">gmap-server</Value>
+    </Setting>
+    <Setting Name="SQLInstance" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ENCORE</Value>
+    </Setting>
+    <Setting Name="SQLPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1776</Value>
+    </Setting>
+    <Setting Name="DatabaseName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ManifestManager</Value>
+    </Setting>
+    <Setting Name="DatabaseUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">gmapuser</Value>
+    </Setting>
+    <Setting Name="DatabasePassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Password1</Value>
+    </Setting>
+    <Setting Name="StartFormWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1200</Value>
+    </Setting>
+    <Setting Name="StartFormHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">725</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

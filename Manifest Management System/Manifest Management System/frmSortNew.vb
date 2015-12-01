@@ -22,7 +22,7 @@ Public Class frmSortNew
 
         For Each drow As DataRow In ds.Tables(0).Rows
             Dim LVI As New ListViewItem
-            LVI.Text = drow.Item(0)
+            LVI.Text = drow.Item(0).ToString
             listFiles.Items.Add(LVI)
         Next
 
@@ -37,15 +37,20 @@ Public Class frmSortNew
     End Sub
 
     Private Sub listFiles_ItemActivate(sender As Object, e As EventArgs) Handles listFiles.ItemActivate
-        pdfViewer.Navigate(sender.SelectedItems.Item(0).Text)
+        Dim lv As ListView = CType(sender, ListView)
+
+        pdfViewer.Navigate(lv.SelectedItems.Item(0).Text)
     End Sub
 
     Private Sub test()
-        Dim bob As New RxConnect(1, 2, 3, 4, 5, 6)
-        Dim jim As New SqlCommand
-        jim.Connection = bob.RxConnection
+        'Dim bob As New RxConnect(1, 2, 3, 4, 5, 6)
+        ' Dim jim As New SqlCommand
+        'jim.Connection = bob.RxConnection
 
 
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        File.Move(TextBox1.Text, TextBox2.Text)
+    End Sub
 End Class

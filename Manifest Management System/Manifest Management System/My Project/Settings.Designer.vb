@@ -13,57 +13,177 @@ Option Explicit On
 
 
 Namespace My
-
-    <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(), _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0"), _
-     Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)> _
+    
+    <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0"),  _
+     Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
     Partial Friend NotInheritable Class MySettings
         Inherits Global.System.Configuration.ApplicationSettingsBase
-
-        Private Shared defaultInstance As MySettings = CType(Global.System.Configuration.ApplicationSettingsBase.Synchronized(New MySettings), MySettings)
-
+        
+        Private Shared defaultInstance As MySettings = CType(Global.System.Configuration.ApplicationSettingsBase.Synchronized(New MySettings()),MySettings)
+        
 #Region "My.Settings Auto-Save Functionality"
 #If _MyType = "WindowsForms" Then
-        Private Shared addedHandler As Boolean
+    Private Shared addedHandler As Boolean
 
-        Private Shared addedHandlerLockObject As New Object
+    Private Shared addedHandlerLockObject As New Object
 
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)> _
-        Private Shared Sub AutoSaveSettings(ByVal sender As Global.System.Object, ByVal e As Global.System.EventArgs)
-            If My.Application.SaveMySettingsOnExit Then
-                My.Settings.Save()
-            End If
-        End Sub
+    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)> _
+    Private Shared Sub AutoSaveSettings(ByVal sender As Global.System.Object, ByVal e As Global.System.EventArgs)
+        If My.Application.SaveMySettingsOnExit Then
+            My.Settings.Save()
+        End If
+    End Sub
 #End If
 #End Region
-
+        
         Public Shared ReadOnly Property [Default]() As MySettings
             Get
-
+                
 #If _MyType = "WindowsForms" Then
-                   If Not addedHandler Then
-                        SyncLock addedHandlerLockObject
-                            If Not addedHandler Then
-                                AddHandler My.Application.Shutdown, AddressOf AutoSaveSettings
-                                addedHandler = True
-                            End If
-                        End SyncLock
-                    End If
+               If Not addedHandler Then
+                    SyncLock addedHandlerLockObject
+                        If Not addedHandler Then
+                            AddHandler My.Application.Shutdown, AddressOf AutoSaveSettings
+                            addedHandler = True
+                        End If
+                    End SyncLock
+                End If
 #End If
                 Return defaultInstance
             End Get
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("O:\")>  _
+        Public Property NewManifestLocation() As String
+            Get
+                Return CType(Me("NewManifestLocation"),String)
+            End Get
+            Set
+                Me("NewManifestLocation") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("M:\RecentFiles\")>  _
+        Public Property PermanentManifestLocation() As String
+            Get
+                Return CType(Me("PermanentManifestLocation"),String)
+            End Get
+            Set
+                Me("PermanentManifestLocation") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("gmap-server")>  _
+        Public Property SQLServer() As String
+            Get
+                Return CType(Me("SQLServer"),String)
+            End Get
+            Set
+                Me("SQLServer") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("ENCORE")>  _
+        Public Property SQLInstance() As String
+            Get
+                Return CType(Me("SQLInstance"),String)
+            End Get
+            Set
+                Me("SQLInstance") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1776")>  _
+        Public Property SQLPort() As String
+            Get
+                Return CType(Me("SQLPort"),String)
+            End Get
+            Set
+                Me("SQLPort") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("ManifestManager")>  _
+        Public Property DatabaseName() As String
+            Get
+                Return CType(Me("DatabaseName"),String)
+            End Get
+            Set
+                Me("DatabaseName") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("gmapuser")>  _
+        Public Property DatabaseUser() As String
+            Get
+                Return CType(Me("DatabaseUser"),String)
+            End Get
+            Set
+                Me("DatabaseUser") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Password1")>  _
+        Public Property DatabasePassword() As String
+            Get
+                Return CType(Me("DatabasePassword"),String)
+            End Get
+            Set
+                Me("DatabasePassword") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1200")>  _
+        Public Property StartFormWidth() As Integer
+            Get
+                Return CType(Me("StartFormWidth"),Integer)
+            End Get
+            Set
+                Me("StartFormWidth") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("725")>  _
+        Public Property StartFormHeight() As Integer
+            Get
+                Return CType(Me("StartFormHeight"),Integer)
+            End Get
+            Set
+                Me("StartFormHeight") = value
+            End Set
         End Property
     End Class
 End Namespace
 
 Namespace My
-
-    <Global.Microsoft.VisualBasic.HideModuleNameAttribute(), _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-     Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()> _
+    
+    <Global.Microsoft.VisualBasic.HideModuleNameAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()>  _
     Friend Module MySettingsProperty
-
-        <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")> _
+        
+        <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
         Friend ReadOnly Property Settings() As Global.Manifest_Management_System.My.MySettings
             Get
                 Return Global.Manifest_Management_System.My.MySettings.Default

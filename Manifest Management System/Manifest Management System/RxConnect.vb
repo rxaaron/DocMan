@@ -112,20 +112,12 @@ Public Class RxConnect
     ''' <param name="Password">Password for specified user</param>
     Public Sub New(ByVal ServerAddress As String, ByVal ServerInstance As String, ByVal Port As String, ByVal Database As String, ByVal UserName As String, ByVal Password As String)
         RxConnection.ConnectionString = "Data Source=" & ServerAddress & "\" & ServerInstance & "," & Port & ";Network Library=DBMSSOCN;Database=" & Database & ";UID=" & UserName & ";PWD=" & Password & ";"
-        Try
-            RxConnection.Open()
-        Catch ex As Exception
-            MsgBox(ex.Message)
-            connected = False
-            Exit Sub
-        End Try
         serverip = ServerAddress
         instancenm = ServerInstance
         portnumber = Port
         dbname = Database
         uname = UserName
         pwd = Password
-        connected = True
     End Sub
     ''' <summary>
     ''' Closes Sql Connection.
@@ -134,5 +126,20 @@ Public Class RxConnect
         RxConnection.Close()
         connected = False
     End Sub
+
+    ''' <summary>
+    ''' Attempts to Open connection.
+    ''' </summary>
+    Public Function OpenConnection() As Boolean
+        Try
+            RxConnection.Open()
+            connected = True
+        Catch ex As Exception
+            MsgBox(ex.Message)
+            connected = False
+            Return False
+        End Try
+        Return True
+    End Function
 
 End Class
