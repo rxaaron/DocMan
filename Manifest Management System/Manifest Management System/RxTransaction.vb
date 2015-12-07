@@ -203,6 +203,7 @@ Public Class RxTransaction
     End Sub
 
     Public Function UpdateRecord(ByVal Facility As Integer, ByVal Controls As Boolean, ByVal FillDate As String, ByVal Cycle As Boolean, ByVal Routing As Integer, ByVal KeyWords As String) As Boolean
+
         Dim da As New SqlDataAdapter
         Dim update As New SqlCommand("UPDATE ManifestData SET Facility = @facility, Controls = @controls, DeliveryDate = @filldate, Cycle = @cycle, Routing = @routing, AssociatedKeywords = @keywords, Verified = @verified, VerifyingUser = @verifyinguser WHERE ID = @ID;", Connection)
         With update.Parameters
@@ -233,15 +234,17 @@ Public Class RxTransaction
             update.ExecuteNonQuery()
             UpdateInformation(FileLocation, Facility, Controls, FillDate, Cycle, Routing, True, KeyWords, Environment.UserName)
         Catch ex As Exception
+            MsgBox(ex.Message)
             Return False
         End Try
 
         Return True
+
     End Function
 
     Public Function InsertRecord(ByVal Facility As Integer, ByVal Controls As Boolean, ByVal FillDate As String, ByVal Cycle As Boolean, ByVal Routing As Integer, ByVal KeyWords As String) As Boolean
         Dim da As New SqlDataAdapter
-        Dim insert As New SqlCommand("INSERT INTO ManifestData (FileLocation,Facility,Controls,DeliveryDate,Cycle,Routing,AssociatedKeywords,Verified) VALUES (@filelocation,@facility,@controls,@filldate,@cycle,@routing,@keywords,@verified);", Connection)
+        Dim insert As New SqlCommand("INSERT INTO ManifestData (FileLocation,Facility,Controls,DeliveryDate,Cycle,Routing,AssociatedKeywords,Verified) VALUES (@filelocation, @facility, @controls, @filldate, @cycle, @routing, @keywords, @verified);", Connection)
         With insert.Parameters
             .Add("@filelocation", SqlDbType.VarChar)
             .Add("@facility", SqlDbType.Int)
@@ -252,14 +255,18 @@ Public Class RxTransaction
             .Add("@keywords", SqlDbType.VarChar)
             .Add("@verified", SqlDbType.Bit)
         End With
+        If String.IsNullOrEmpty(KeyWords) = True Then
+            insert.Parameters("@keywords").Value = DBNull.Value
+        Else
+            insert.Parameters("@keywords").Value = KeyWords
+        End If
         With insert
             .Parameters("@filelocation").Value = FileLocation
             .Parameters("@facility").Value = Facility
             .Parameters("@controls").Value = Controls
-            .Parameters("@filldate").Value = FillDate
+            .Parameters("@filldate").Value = Date.Parse(FillDate)
             .Parameters("@cycle").Value = Cycle
             .Parameters("@routing").Value = Routing
-            .Parameters("@keywords").Value = KeyWords
             .Parameters("@verified").Value = False
         End With
         da.InsertCommand = insert
@@ -269,7 +276,7 @@ Public Class RxTransaction
             RowID = GetRowIDFromFilePath(FileLocation)
             SetInfoFromRowID(RowID)
         Catch ex As Exception
-            MsgBox(ex.Message)
+            MsgBox("1  " & ex.Message)
             Return False
         End Try
 
@@ -299,5 +306,6 @@ Public Class RxTransaction
         insert.Parameters("@error").Value = ErrorMessage
         insert.ExecuteNonQuery()
     End Sub
+
 
 End Class

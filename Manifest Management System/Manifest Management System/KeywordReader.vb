@@ -51,6 +51,7 @@ Public Class KeywordReader
         Dim reader As New PdfReader(FileLocation)
         Dim index As Boolean = reader.Info.TryGetValue("Keywords", KeyWords)
 
+        reader.Close()
         Return KeyWords
     End Function
 
