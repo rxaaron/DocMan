@@ -89,6 +89,9 @@ Partial Class MainForm
         Me.lblSearchVerifyingUser = New System.Windows.Forms.Label()
         Me.btnUpdateManifest = New System.Windows.Forms.Button()
         Me.AlwaysOnTopToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SpecialFunctionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SplitManifestToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteManifestToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControls.SuspendLayout()
         Me.tabVerify.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -273,6 +276,8 @@ Partial Class MainForm
         '
         'cbVerifyRouting
         '
+        Me.cbVerifyRouting.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.cbVerifyRouting.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.cbVerifyRouting.FormattingEnabled = True
         Me.cbVerifyRouting.Location = New System.Drawing.Point(96, 120)
         Me.cbVerifyRouting.Name = "cbVerifyRouting"
@@ -310,6 +315,8 @@ Partial Class MainForm
         '
         'cbVerifyFacility
         '
+        Me.cbVerifyFacility.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
+        Me.cbVerifyFacility.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.cbVerifyFacility.FormattingEnabled = True
         Me.cbVerifyFacility.Location = New System.Drawing.Point(55, 21)
         Me.cbVerifyFacility.Name = "cbVerifyFacility"
@@ -339,6 +346,7 @@ Partial Class MainForm
         '
         'listUnverified
         '
+        Me.listUnverified.HideSelection = False
         Me.listUnverified.Location = New System.Drawing.Point(8, 35)
         Me.listUnverified.MultiSelect = False
         Me.listUnverified.Name = "listUnverified"
@@ -502,6 +510,7 @@ Partial Class MainForm
         '
         Me.listSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.listSearch.HideSelection = False
         Me.listSearch.Location = New System.Drawing.Point(8, 256)
         Me.listSearch.MultiSelect = False
         Me.listSearch.Name = "listSearch"
@@ -609,7 +618,7 @@ Partial Class MainForm
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.SpecialFunctionsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1184, 24)
@@ -758,6 +767,25 @@ Partial Class MainForm
         Me.AlwaysOnTopToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.AlwaysOnTopToolStripMenuItem.Text = "Always On Top"
         '
+        'SpecialFunctionsToolStripMenuItem
+        '
+        Me.SpecialFunctionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SplitManifestToolStripMenuItem, Me.DeleteManifestToolStripMenuItem})
+        Me.SpecialFunctionsToolStripMenuItem.Name = "SpecialFunctionsToolStripMenuItem"
+        Me.SpecialFunctionsToolStripMenuItem.Size = New System.Drawing.Size(111, 20)
+        Me.SpecialFunctionsToolStripMenuItem.Text = "Special Functions"
+        '
+        'SplitManifestToolStripMenuItem
+        '
+        Me.SplitManifestToolStripMenuItem.Name = "SplitManifestToolStripMenuItem"
+        Me.SplitManifestToolStripMenuItem.Size = New System.Drawing.Size(156, 22)
+        Me.SplitManifestToolStripMenuItem.Text = "Split Manifest"
+        '
+        'DeleteManifestToolStripMenuItem
+        '
+        Me.DeleteManifestToolStripMenuItem.Name = "DeleteManifestToolStripMenuItem"
+        Me.DeleteManifestToolStripMenuItem.Size = New System.Drawing.Size(156, 22)
+        Me.DeleteManifestToolStripMenuItem.Text = "Delete Manifest"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -854,4 +882,7 @@ Partial Class MainForm
     Friend WithEvents Label20 As Label
     Friend WithEvents btnUpdateManifest As Button
     Friend WithEvents AlwaysOnTopToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SpecialFunctionsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SplitManifestToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DeleteManifestToolStripMenuItem As ToolStripMenuItem
 End Class

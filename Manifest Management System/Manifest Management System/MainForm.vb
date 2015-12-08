@@ -429,7 +429,7 @@ Public Class MainForm
 
     Private Sub SplitManifestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SplitManifestToolStripMenuItem.Click
         If listUnverified.SelectedItems.Count < 1 Then
-            MsgBox("There is no manifest selected.", MsgBoxStyle.Question, "Error")
+            MsgBox("There is no manifest selected.", MsgBoxStyle.Question, "Error Found")
         Else
             SQLConnection.OpenConnection()
             Dim SplitFile As New RxTransaction(SQLConnection.RxConnection, listUnverified.SelectedItems.Item(0).SubItems.Item("FilePath").Text)
