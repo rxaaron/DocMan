@@ -19,6 +19,8 @@ Public Class MainForm
         FillFacilityBox(cbSearchResultFacility)
         FillRoutingBox(cbSearchRouting)
 
+        VerifyEntryStatus(False)
+
     End Sub
 
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -185,7 +187,7 @@ Public Class MainForm
 
         Dim LV As ListView = CType(sender, ListView)
         ItemSelected(LV)
-
+        VerifyEntryStatus(True)
     End Sub
 
     Private Sub MapNetworkDrivesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MapNetworkDrivesToolStripMenuItem.Click
@@ -195,11 +197,11 @@ Public Class MainForm
     Private Function CheckMappedDrives() As Boolean
         Dim NM As New NetworkMonitor
         If NM.ManifestReady = False Then
-            MsgBox("Manifest network drive is missing or unavailable.", MsgBoxStyle.Critical, "Manifest Folder")
+            MsgBox("Manifest network drive is missing or unavailable." & Chr(13) & Chr(13) & "Please go to File->Map Network Drives to fix this problem", MsgBoxStyle.Critical, "Manifest Folder")
             Return False
         End If
         If NM.ScannedReady = False Then
-            MsgBox("Scanned Files network drive is missing or unavailable.", MsgBoxStyle.Critical, "Scanned Files Folder")
+            MsgBox("Scanned Files network drive is missing or unavailable." & Chr(13) & Chr(13) & "Please go to File->Map Network Drives to fix this problem", MsgBoxStyle.Critical, "Scanned Files Folder")
             Return False
         End If
         Return True
@@ -248,6 +250,7 @@ Public Class MainForm
             Dim VerifyManifest As New RxTransaction(SQLConnection.RxConnection, CInt(listUnverified.SelectedItems().Item(0).SubItems.Item("RowID").Text))
             If VerifyManifest.UpdateRecord(CInt(cbVerifyFacility.SelectedValue), chkVerifyControls.Checked, dtpVerifyDeliveryDate.Value.ToShortDateString, chkVerifyCycle.Checked, CInt(cbVerifyRouting.SelectedValue), rtbVerifyKeywords.Text) = True Then
                 RefreshUnverifiedList()
+                VerifyEntryStatus(False)
             End If
         End If
         SQLConnection.CloseConnection()
@@ -415,6 +418,50 @@ Public Class MainForm
             Me.TopMost = True
         Else
             Me.TopMost = False
+        End If
+    End Sub
+
+    Private Sub VerifyEntryStatus(ByVal IsEnabled As Boolean)
+        cbVerifyFacility.Enabled = IsEnabled
+        cbVerifyRouting.Enabled = IsEnabled
+        btnVerifySaveManifest.Enabled = IsEnabled
+    End Sub
+
+    Private Sub SplitManifestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SplitManifestToolStripMenuItem.Click
+        If listUnverified.SelectedItems.Count < 1 Then
+            MsgBox("There is no manifest selected.", MsgBoxStyle.Question, "Error")
+        Else
+            SQLConnection.OpenConnection()
+            Dim SplitFile As New RxTransaction(SQLConnection.RxConnection, listUnverified.SelectedItems.Item(0).SubItems.Item("FilePath").Text)
+            If SplitFile.InsertRecord(CInt(listUnverified.SelectedItems.Item(0).SubItems.Item("FacilityID").Text), CBool(listUnverified.SelectedItems.Item(0).SubItems.Item("Controls").Text), listUnverified.SelectedItems.Item(0).SubItems.Item("DeliveryDate").Text, CBool(listUnverified.SelectedItems.Item(0).SubItems.Item("Cycle").Text), CInt(listUnverified.SelectedItems.Item(0).SubItems.Item("RoutingID").Text), listUnverified.SelectedItems.Item(0).SubItems.Item("AssociatedKeywords").Text) = True Then
+                MsgBox("Manifest Split.")
+            End If
+            SQLConnection.CloseConnection()
+            RefreshUnverifiedList()
+        End If
+    End Sub
+
+    Private Sub DeleteManifestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteManifestToolStripMenuItem.Click
+        If listUnverified.SelectedItems.Count < 1 Then
+            MsgBox("There is no manifest selected.", MsgBoxStyle.Question, "Error")
+        Else
+            Dim dr As MsgBoxResult = MsgBox("Are you sure you want to permanently remove this manifest?", MsgBoxStyle.YesNo, "Are You Sure?")
+            If dr = MsgBoxResult.Yes Then
+                SQLConnection.OpenConnection()
+
+                Dim da As New SqlDataAdapter
+                Dim update As New SqlCommand("UPDATE ManifestData SET Active=@active WHERE ID=@rid;", SQLConnection.RxConnection)
+                da.UpdateCommand = update
+                update.Parameters.Add("@active", SqlDbType.Bit)
+                update.Parameters.Add("@rid", SqlDbType.Int)
+                update.Parameters("@active").Value = False
+                update.Parameters("@rid").Value = CInt(listUnverified.SelectedItems.Item(0).SubItems.Item("RowID").Text)
+                update.ExecuteNonQuery()
+                SQLConnection.CloseConnection()
+                MsgBox("Manifest Deleted.")
+                RefreshUnverifiedList()
+            End If
+
         End If
     End Sub
 
