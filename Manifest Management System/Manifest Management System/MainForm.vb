@@ -7,11 +7,18 @@ Public Class MainForm
         Me.Width = My.Settings.StartFormWidth
         Me.Height = My.Settings.StartFormHeight
 
-        RefreshUnverifiedList()
-        CheckMappedDrives()
+
+        If CheckMappedDrives() = True Then
+            RefreshNewManifests()
+        End If
+
+
         FillRoutingBox(cbVerifyRouting)
         FillFacilityBox(cbVerifyFacility)
         FillFacilityBox(cbSearchFacility)
+        FillFacilityBox(cbSearchResultFacility)
+        FillRoutingBox(cbSearchRouting)
+
     End Sub
 
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -21,7 +28,10 @@ Public Class MainForm
 
     Private Sub RefreshNewManifests()
         If SQLConnection.OpenConnection = True Then
+            ProcessingDialog.Show()
+            ProcessingDialog.pbrUpdate.Value = 0
             Dim FileList() As String = Directory.GetFiles(My.Settings.NewManifestLocation, "*.pdf")
+            ProcessingDialog.pbrUpdate.Maximum = FileList.Count
 
             For Each filepath As String In FileList
 
@@ -72,9 +82,13 @@ Public Class MainForm
                 End If
                 ThisFile = Nothing
                 ThisFilesProperties = Nothing
+                ProcessingDialog.pbrUpdate.PerformStep()
             Next
         End If
         SQLConnection.CloseConnection()
+        RefreshUnverifiedList()
+        ProcessingDialog.Close()
+
     End Sub
 
     Private Sub RefreshDataToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshDataToolStripMenuItem.Click
@@ -178,15 +192,18 @@ Public Class MainForm
         CheckMappedDrives()
     End Sub
 
-    Private Sub CheckMappedDrives()
+    Private Function CheckMappedDrives() As Boolean
         Dim NM As New NetworkMonitor
         If NM.ManifestReady = False Then
             MsgBox("Manifest network drive is missing or unavailable.", MsgBoxStyle.Critical, "Manifest Folder")
+            Return False
         End If
         If NM.ScannedReady = False Then
             MsgBox("Scanned Files network drive is missing or unavailable.", MsgBoxStyle.Critical, "Scanned Files Folder")
+            Return False
         End If
-    End Sub
+        Return True
+    End Function
 
     Public Sub FillFacilityBox(ByVal FacilityComboBox As ComboBox)
 
@@ -284,6 +301,9 @@ Public Class MainForm
             If CBool(drow.Item("Cycle").ToString) = True Then
                 ShownName = ShownName & " Cycle"
             End If
+            If CBool(drow.Item("Verified").ToString) = False Then
+                ShownName = "*" & ShownName
+            End If
             lvi.Text = ShownName
             Dim lvisub1 As New ListViewItem.ListViewSubItem
             lvisub1.Name = "RowID"
@@ -328,22 +348,74 @@ Public Class MainForm
             listSearch.Items.Add(lvi)
         Next
 
+        EditPanelState(False)
+        SearchBrowser.Navigate("about:blank")
+
     End Sub
 
     Private Sub listSearch_ItemActivate(sender As Object, e As EventArgs) Handles listSearch.ItemActivate
+
         Dim LV As ListView = CType(sender, ListView)
         SearchBrowser.Navigate(LV.SelectedItems.Item(0).SubItems.Item("FilePath").Text.ToString)
-
+        EditPanelState(False)
+        lblSearchID.Text = LV.SelectedItems.Item(0).SubItems.Item("RowId").Text.ToString
+        txtSearchFilePath.Text = LV.SelectedItems.Item(0).SubItems.Item("FilePath").Text.ToString
+        rtbSearchKeywords.Clear()
+        rtbSearchKeywords.Text = LV.SelectedItems.Item(0).SubItems.Item("AssociatedKeywords").Text.ToString
+        cbSearchResultFacility.SelectedValue = CInt(LV.SelectedItems.Item(0).SubItems.Item("FacilityID").Text)
+        dtpSearchDateOfService.Value = Date.Parse(LV.SelectedItems.Item(0).SubItems.Item("DeliveryDate").Text)
+        chkSearchControls.Checked = CBool(LV.SelectedItems.Item(0).SubItems.Item("Controls").Text)
+        chkSearchCycle.Checked = CBool(LV.SelectedItems.Item(0).SubItems.Item("Cycle").Text)
+        cbSearchRouting.SelectedValue = CInt(LV.SelectedItems.Item(0).SubItems.Item("RoutingID").Text)
+        lblSearchVerifyingUser.Text = LV.SelectedItems.Item(0).SubItems.Item("VerifyingUser").Text
     End Sub
 
-    Private Sub ResetEditPanel()
-        EditPanel.BackColor = Color.DarkGray
+    Private Sub EditPanelState(ByVal IsEnabled As Boolean)
+
+        If IsEnabled = True Then
+            EditPanel.BackColor = Color.LightGray
+        Else
+            EditPanel.BackColor = Color.DarkGray
+        End If
+        cbSearchResultFacility.Enabled = IsEnabled
+        dtpSearchDateOfService.Enabled = IsEnabled
+        chkSearchControls.Enabled = IsEnabled
+        chkSearchCycle.Enabled = IsEnabled
+        cbSearchRouting.Enabled = IsEnabled
+        btnUpdateManifest.Enabled = IsEnabled
 
     End Sub
 
     Private Sub lnkEdit_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkEdit.LinkClicked
-        EditPanel.BackColor = Color.LightGray
+        EditPanelState(True)
+    End Sub
 
+    Private Sub btnUpdateManifest_Click(sender As Object, e As EventArgs) Handles btnUpdateManifest.Click
+        SQLConnection.OpenConnection()
+
+        If CInt(cbSearchRouting.SelectedValue) = 3 Or CInt(cbSearchResultFacility.SelectedValue) = 20 Then
+            MsgBox("You cannot verify a manifest as an Unknown Facility or Send/Receive status.", MsgBoxStyle.Exclamation, "Entry Error")
+        Else
+            Dim UpdateManifest As New RxTransaction(SQLConnection.RxConnection, CInt(listSearch.SelectedItems().Item(0).SubItems.Item("RowID").Text))
+            If UpdateManifest.UpdateRecord(CInt(cbSearchResultFacility.SelectedValue), chkSearchControls.Checked, dtpSearchDateOfService.Value.ToShortDateString, chkSearchCycle.Checked, CInt(cbSearchRouting.SelectedValue), rtbSearchKeywords.Text) = True Then
+                EditPanelState(False)
+            End If
+        End If
+
+        SQLConnection.CloseConnection()
+    End Sub
+
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        Me.Close()
+    End Sub
+
+    Private Sub AlwaysOnTopToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AlwaysOnTopToolStripMenuItem.Click
+        Dim tsmi As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        If tsmi.Checked = True Then
+            Me.TopMost = True
+        Else
+            Me.TopMost = False
+        End If
     End Sub
 
 End Class

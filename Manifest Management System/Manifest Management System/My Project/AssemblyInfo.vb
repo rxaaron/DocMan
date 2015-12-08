@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Manifest Management System")>
 <Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("Microsoft")>
+<Assembly: AssemblyCompany("Encore")>
 <Assembly: AssemblyProduct("Manifest Management System")>
-<Assembly: AssemblyCopyright("Copyright © Microsoft 2015")>
+<Assembly: AssemblyCopyright("Copyright © Encore 2015")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

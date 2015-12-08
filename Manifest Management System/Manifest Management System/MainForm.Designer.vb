@@ -49,6 +49,8 @@ Partial Class MainForm
         Me.listUnverified = New System.Windows.Forms.ListView()
         Me.tabSearch = New System.Windows.Forms.TabPage()
         Me.EditPanel = New System.Windows.Forms.Panel()
+        Me.cbSearchResultFacility = New System.Windows.Forms.ComboBox()
+        Me.Label16 = New System.Windows.Forms.Label()
         Me.rtbSearchKeywords = New System.Windows.Forms.RichTextBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.txtSearchFilePath = New System.Windows.Forms.TextBox()
@@ -76,8 +78,17 @@ Partial Class MainForm
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.dtpSearchDateOfService = New System.Windows.Forms.DateTimePicker()
+        Me.chkSearchControls = New System.Windows.Forms.CheckBox()
+        Me.chkSearchCycle = New System.Windows.Forms.CheckBox()
+        Me.cbSearchRouting = New System.Windows.Forms.ComboBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.lblSearchVerifyingUser = New System.Windows.Forms.Label()
+        Me.btnUpdateManifest = New System.Windows.Forms.Button()
+        Me.AlwaysOnTopToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControls.SuspendLayout()
         Me.tabVerify.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -338,6 +349,7 @@ Partial Class MainForm
         '
         'tabSearch
         '
+        Me.tabSearch.Controls.Add(Me.Label19)
         Me.tabSearch.Controls.Add(Me.EditPanel)
         Me.tabSearch.Controls.Add(Me.SearchBrowser)
         Me.tabSearch.Controls.Add(Me.listSearch)
@@ -355,7 +367,16 @@ Partial Class MainForm
         Me.EditPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.EditPanel.BackColor = System.Drawing.Color.DarkGray
-        Me.EditPanel.Controls.Add(Me.ComboBox1)
+        Me.EditPanel.Controls.Add(Me.btnUpdateManifest)
+        Me.EditPanel.Controls.Add(Me.lblSearchVerifyingUser)
+        Me.EditPanel.Controls.Add(Me.cbSearchRouting)
+        Me.EditPanel.Controls.Add(Me.chkSearchCycle)
+        Me.EditPanel.Controls.Add(Me.chkSearchControls)
+        Me.EditPanel.Controls.Add(Me.dtpSearchDateOfService)
+        Me.EditPanel.Controls.Add(Me.cbSearchResultFacility)
+        Me.EditPanel.Controls.Add(Me.Label20)
+        Me.EditPanel.Controls.Add(Me.Label18)
+        Me.EditPanel.Controls.Add(Me.Label17)
         Me.EditPanel.Controls.Add(Me.Label16)
         Me.EditPanel.Controls.Add(Me.rtbSearchKeywords)
         Me.EditPanel.Controls.Add(Me.Label15)
@@ -369,6 +390,24 @@ Partial Class MainForm
         Me.EditPanel.Name = "EditPanel"
         Me.EditPanel.Size = New System.Drawing.Size(209, 626)
         Me.EditPanel.TabIndex = 3
+        '
+        'cbSearchResultFacility
+        '
+        Me.cbSearchResultFacility.Enabled = False
+        Me.cbSearchResultFacility.FormattingEnabled = True
+        Me.cbSearchResultFacility.Location = New System.Drawing.Point(109, 135)
+        Me.cbSearchResultFacility.Name = "cbSearchResultFacility"
+        Me.cbSearchResultFacility.Size = New System.Drawing.Size(97, 21)
+        Me.cbSearchResultFacility.TabIndex = 11
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(58, 138)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(42, 13)
+        Me.Label16.TabIndex = 10
+        Me.Label16.Text = "Facility:"
         '
         'rtbSearchKeywords
         '
@@ -453,20 +492,20 @@ Partial Class MainForm
         Me.SearchBrowser.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SearchBrowser.Location = New System.Drawing.Point(224, 33)
+        Me.SearchBrowser.Location = New System.Drawing.Point(224, 3)
         Me.SearchBrowser.MinimumSize = New System.Drawing.Size(20, 20)
         Me.SearchBrowser.Name = "SearchBrowser"
-        Me.SearchBrowser.Size = New System.Drawing.Size(732, 596)
+        Me.SearchBrowser.Size = New System.Drawing.Size(732, 626)
         Me.SearchBrowser.TabIndex = 2
         '
         'listSearch
         '
         Me.listSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.listSearch.Location = New System.Drawing.Point(8, 243)
+        Me.listSearch.Location = New System.Drawing.Point(8, 256)
         Me.listSearch.MultiSelect = False
         Me.listSearch.Name = "listSearch"
-        Me.listSearch.Size = New System.Drawing.Size(210, 386)
+        Me.listSearch.Size = New System.Drawing.Size(210, 373)
         Me.listSearch.TabIndex = 1
         Me.listSearch.UseCompatibleStateImageBehavior = False
         '
@@ -609,27 +648,115 @@ Partial Class MainForm
         '
         'OptionsToolStripMenuItem
         '
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AlwaysOnTopToolStripMenuItem})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
         Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
         Me.OptionsToolStripMenuItem.Text = "Settings"
         '
-        'Label16
+        'dtpSearchDateOfService
         '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(4, 138)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(42, 13)
-        Me.Label16.TabIndex = 10
-        Me.Label16.Text = "Facility:"
+        Me.dtpSearchDateOfService.Enabled = False
+        Me.dtpSearchDateOfService.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpSearchDateOfService.Location = New System.Drawing.Point(109, 162)
+        Me.dtpSearchDateOfService.Name = "dtpSearchDateOfService"
+        Me.dtpSearchDateOfService.Size = New System.Drawing.Size(97, 20)
+        Me.dtpSearchDateOfService.TabIndex = 12
         '
-        'ComboBox1
+        'chkSearchControls
         '
-        Me.ComboBox1.Enabled = False
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(52, 135)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(154, 21)
-        Me.ComboBox1.TabIndex = 11
+        Me.chkSearchControls.AutoSize = True
+        Me.chkSearchControls.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.chkSearchControls.Enabled = False
+        Me.chkSearchControls.Location = New System.Drawing.Point(3, 188)
+        Me.chkSearchControls.Name = "chkSearchControls"
+        Me.chkSearchControls.Size = New System.Drawing.Size(119, 17)
+        Me.chkSearchControls.TabIndex = 13
+        Me.chkSearchControls.Text = "Controlled Manifest:"
+        Me.chkSearchControls.UseVisualStyleBackColor = True
+        '
+        'chkSearchCycle
+        '
+        Me.chkSearchCycle.AutoSize = True
+        Me.chkSearchCycle.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.chkSearchCycle.Enabled = False
+        Me.chkSearchCycle.Location = New System.Drawing.Point(24, 211)
+        Me.chkSearchCycle.Name = "chkSearchCycle"
+        Me.chkSearchCycle.Size = New System.Drawing.Size(98, 17)
+        Me.chkSearchCycle.TabIndex = 13
+        Me.chkSearchCycle.Text = "Cycle Manifest:"
+        Me.chkSearchCycle.UseVisualStyleBackColor = True
+        '
+        'cbSearchRouting
+        '
+        Me.cbSearchRouting.Enabled = False
+        Me.cbSearchRouting.FormattingEnabled = True
+        Me.cbSearchRouting.Location = New System.Drawing.Point(109, 234)
+        Me.cbSearchRouting.Name = "cbSearchRouting"
+        Me.cbSearchRouting.Size = New System.Drawing.Size(97, 21)
+        Me.cbSearchRouting.TabIndex = 14
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(19, 168)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(84, 13)
+        Me.Label17.TabIndex = 10
+        Me.Label17.Text = "Date of Service:"
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Location = New System.Drawing.Point(17, 237)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(83, 13)
+        Me.Label18.TabIndex = 10
+        Me.Label18.Text = "Sent/Received:"
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Location = New System.Drawing.Point(11, 240)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(197, 13)
+        Me.Label19.TabIndex = 4
+        Me.Label19.Text = "* unverified manifest, please look closely"
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(23, 261)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(75, 13)
+        Me.Label20.TabIndex = 10
+        Me.Label20.Text = "Verfiying User:"
+        '
+        'lblSearchVerifyingUser
+        '
+        Me.lblSearchVerifyingUser.AutoSize = True
+        Me.lblSearchVerifyingUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSearchVerifyingUser.Location = New System.Drawing.Point(107, 261)
+        Me.lblSearchVerifyingUser.Name = "lblSearchVerifyingUser"
+        Me.lblSearchVerifyingUser.Size = New System.Drawing.Size(15, 13)
+        Me.lblSearchVerifyingUser.TabIndex = 15
+        Me.lblSearchVerifyingUser.Text = "--"
+        '
+        'btnUpdateManifest
+        '
+        Me.btnUpdateManifest.Enabled = False
+        Me.btnUpdateManifest.Location = New System.Drawing.Point(7, 287)
+        Me.btnUpdateManifest.Name = "btnUpdateManifest"
+        Me.btnUpdateManifest.Size = New System.Drawing.Size(198, 46)
+        Me.btnUpdateManifest.TabIndex = 16
+        Me.btnUpdateManifest.Text = "Update Manifest"
+        Me.btnUpdateManifest.UseVisualStyleBackColor = True
+        '
+        'AlwaysOnTopToolStripMenuItem
+        '
+        Me.AlwaysOnTopToolStripMenuItem.CheckOnClick = True
+        Me.AlwaysOnTopToolStripMenuItem.Name = "AlwaysOnTopToolStripMenuItem"
+        Me.AlwaysOnTopToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.AlwaysOnTopToolStripMenuItem.Text = "Always On Top"
         '
         'MainForm
         '
@@ -649,6 +776,7 @@ Partial Class MainForm
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.tabSearch.ResumeLayout(False)
+        Me.tabSearch.PerformLayout()
         Me.EditPanel.ResumeLayout(False)
         Me.EditPanel.PerformLayout()
         Me.Panel3.ResumeLayout(False)
@@ -713,6 +841,17 @@ Partial Class MainForm
     Friend WithEvents Label14 As Label
     Friend WithEvents lblSearchID As Label
     Friend WithEvents Label13 As Label
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents cbSearchResultFacility As ComboBox
     Friend WithEvents Label16 As Label
+    Friend WithEvents chkSearchCycle As CheckBox
+    Friend WithEvents chkSearchControls As CheckBox
+    Friend WithEvents dtpSearchDateOfService As DateTimePicker
+    Friend WithEvents cbSearchRouting As ComboBox
+    Friend WithEvents Label18 As Label
+    Friend WithEvents Label17 As Label
+    Friend WithEvents Label19 As Label
+    Friend WithEvents lblSearchVerifyingUser As Label
+    Friend WithEvents Label20 As Label
+    Friend WithEvents btnUpdateManifest As Button
+    Friend WithEvents AlwaysOnTopToolStripMenuItem As ToolStripMenuItem
 End Class

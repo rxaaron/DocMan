@@ -54,7 +54,7 @@ Public Class NetworkMonitor
     Public Function ManifestReady() As Boolean
         If Directory.Exists("M:\") = True Then
             Return True
-        ElseIf MapDrive("M", "\\gmap-server\Encore_Manifest_Software", "grcs\rcbstaff", "Password1") = True
+        ElseIf MapDrive("M", "\\GMAP-SERVER\Encore_Manifest_Software", Nothing, Nothing) = True
             Return True
         Else
             Return False
@@ -64,7 +64,7 @@ Public Class NetworkMonitor
     Public Function ScannedReady() As Boolean
         If Directory.Exists("O:\") = True Then
             Return True
-        ElseIf MapDrive("O", "\\encorelaptop\ScanSnap", "encorelaptop\gmapuser", "Password1") = True
+        ElseIf MapDrive("O", "\\EncoreLaptop\ScanSnap", "encorelaptop\gmapuser", "Password1") = True
             Return True
         Else
             Return False
