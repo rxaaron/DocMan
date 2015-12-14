@@ -160,6 +160,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ItemSelected(ByVal LV As ListView)
+
         VerifyBrowser.Navigate(LV.SelectedItems().Item(0).SubItems.Item("FilePath").Text.ToString)
         cbVerifyFacility.SelectedValue = CInt(LV.SelectedItems().Item(0).SubItems.Item("FacilityID").Text)
         If Date.Compare(Date.Parse(LV.SelectedItems().Item(0).SubItems.Item("DeliveryDate").Text), Date.Parse("01/01/1900")) = 0 Then
@@ -176,6 +177,8 @@ Public Class MainForm
         lblVerifyID.Text = LV.SelectedItems().Item(0).SubItems.Item("RowID").Text
         txtVerifyFilePath.Text = LV.SelectedItems().Item(0).SubItems.Item("FilePath").Text
         VerifyEntryStatus(True)
+        cbVerifyFacility.Focus()
+
     End Sub
 
     Private Sub listUnverified_ItemActivate(sender As Object, e As EventArgs) Handles listUnverified.ItemActivate
@@ -251,7 +254,9 @@ Public Class MainForm
         listUnverified.Items(0).Focused = True
         listUnverified.Items(0).Selected = True
         ItemSelected(listUnverified)
+
         SQLConnection.CloseConnection()
+
     End Sub
 
     Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
