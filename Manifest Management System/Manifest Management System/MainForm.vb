@@ -7,12 +7,6 @@ Public Class MainForm
         Me.Width = My.Settings.StartFormWidth
         Me.Height = My.Settings.StartFormHeight
 
-
-        If CheckMappedDrives() = True Then
-            RefreshNewManifests()
-        End If
-
-
         FillRoutingBox(cbVerifyRouting)
         FillFacilityBox(cbVerifyFacility)
         FillFacilityBox(cbSearchFacility)
@@ -181,13 +175,14 @@ Public Class MainForm
         rtbVerifyKeywords.Text = LV.SelectedItems().Item(0).SubItems.Item("AssociatedKeywords").Text
         lblVerifyID.Text = LV.SelectedItems().Item(0).SubItems.Item("RowID").Text
         txtVerifyFilePath.Text = LV.SelectedItems().Item(0).SubItems.Item("FilePath").Text
+        VerifyEntryStatus(True)
     End Sub
 
     Private Sub listUnverified_ItemActivate(sender As Object, e As EventArgs) Handles listUnverified.ItemActivate
 
         Dim LV As ListView = CType(sender, ListView)
         ItemSelected(LV)
-        VerifyEntryStatus(True)
+
     End Sub
 
     Private Sub MapNetworkDrivesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MapNetworkDrivesToolStripMenuItem.Click
@@ -253,6 +248,9 @@ Public Class MainForm
                 VerifyEntryStatus(False)
             End If
         End If
+        listUnverified.Items(0).Focused = True
+        listUnverified.Items(0).Selected = True
+        ItemSelected(listUnverified)
         SQLConnection.CloseConnection()
     End Sub
 
@@ -462,6 +460,12 @@ Public Class MainForm
                 RefreshUnverifiedList()
             End If
 
+        End If
+    End Sub
+
+    Private Sub MainForm_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        If CheckMappedDrives() = True Then
+            RefreshNewManifests()
         End If
     End Sub
 
