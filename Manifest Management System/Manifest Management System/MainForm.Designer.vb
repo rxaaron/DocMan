@@ -92,6 +92,10 @@ Partial Class MainForm
         Me.SpecialFunctionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SplitManifestToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeleteManifestToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DatabaseManagementToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddFacilityPossibilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddControlsPossibilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddFacilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControls.SuspendLayout()
         Me.tabVerify.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -716,7 +720,7 @@ Partial Class MainForm
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.SpecialFunctionsToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.SpecialFunctionsToolStripMenuItem, Me.DatabaseManagementToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1184, 24)
@@ -785,6 +789,32 @@ Partial Class MainForm
         Me.DeleteManifestToolStripMenuItem.Name = "DeleteManifestToolStripMenuItem"
         Me.DeleteManifestToolStripMenuItem.Size = New System.Drawing.Size(156, 22)
         Me.DeleteManifestToolStripMenuItem.Text = "Delete Manifest"
+        '
+        'DatabaseManagementToolStripMenuItem
+        '
+        Me.DatabaseManagementToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddFacilityPossibilityToolStripMenuItem, Me.AddControlsPossibilityToolStripMenuItem, Me.AddFacilityToolStripMenuItem})
+        Me.DatabaseManagementToolStripMenuItem.Enabled = False
+        Me.DatabaseManagementToolStripMenuItem.Name = "DatabaseManagementToolStripMenuItem"
+        Me.DatabaseManagementToolStripMenuItem.Size = New System.Drawing.Size(141, 20)
+        Me.DatabaseManagementToolStripMenuItem.Text = "Database Management"
+        '
+        'AddFacilityPossibilityToolStripMenuItem
+        '
+        Me.AddFacilityPossibilityToolStripMenuItem.Name = "AddFacilityPossibilityToolStripMenuItem"
+        Me.AddFacilityPossibilityToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.AddFacilityPossibilityToolStripMenuItem.Text = "Add Facility Possibility"
+        '
+        'AddControlsPossibilityToolStripMenuItem
+        '
+        Me.AddControlsPossibilityToolStripMenuItem.Name = "AddControlsPossibilityToolStripMenuItem"
+        Me.AddControlsPossibilityToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.AddControlsPossibilityToolStripMenuItem.Text = "Add Controls Possibility"
+        '
+        'AddFacilityToolStripMenuItem
+        '
+        Me.AddFacilityToolStripMenuItem.Name = "AddFacilityToolStripMenuItem"
+        Me.AddFacilityToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.AddFacilityToolStripMenuItem.Text = "Add Facility"
         '
         'MainForm
         '
@@ -885,4 +915,8 @@ Partial Class MainForm
     Friend WithEvents SpecialFunctionsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SplitManifestToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents DeleteManifestToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DatabaseManagementToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AddFacilityPossibilityToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AddControlsPossibilityToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AddFacilityToolStripMenuItem As ToolStripMenuItem
 End Class

@@ -26,7 +26,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>Manifest Management</ProductName>
     <PublisherName>Encore Pharmacy</PublisherName>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -119,6 +119,24 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddControlsPossibility.Designer.vb">
+      <DependentUpon>AddControlsPossibility.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AddControlsPossibility.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddFacility.Designer.vb">
+      <DependentUpon>AddFacility.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AddFacility.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddFacilityPossibility.Designer.vb">
+      <DependentUpon>AddFacilityPossibility.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AddFacilityPossibility.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmSortNew.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +177,15 @@
     <Compile Include="RxTransaction.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AddControlsPossibility.resx">
+      <DependentUpon>AddControlsPossibility.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddFacility.resx">
+      <DependentUpon>AddFacility.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddFacilityPossibility.resx">
+      <DependentUpon>AddFacilityPossibility.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmSortNew.resx">
       <DependentUpon>frmSortNew.vb</DependentUpon>
     </EmbeddedResource>

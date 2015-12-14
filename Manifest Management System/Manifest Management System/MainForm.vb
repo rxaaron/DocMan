@@ -11,6 +11,7 @@ Public Class MainForm
         FillFacilityBox(cbVerifyFacility)
         FillFacilityBox(cbSearchFacility)
         FillFacilityBox(cbSearchResultFacility)
+        FillFacilityBox(AddFacilityPossibility.cbAFPFacility)
         FillRoutingBox(cbSearchRouting)
 
         VerifyEntryStatus(False)
@@ -471,6 +472,59 @@ Public Class MainForm
     Private Sub MainForm_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         If CheckMappedDrives() = True Then
             RefreshNewManifests()
+        End If
+
+        Dim ataylor As String = "ataylor"
+        If ataylor.Equals(Environment.UserName) = True Then
+            DatabaseManagementToolStripMenuItem.Enabled = True
+        End If
+
+    End Sub
+
+    Private Sub AddFacilityPossibilityToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddFacilityPossibilityToolStripMenuItem.Click
+        AddFacilityPossibility.txtFacPossText.Clear()
+
+        If AddFacilityPossibility.ShowDialog = DialogResult.OK Then
+            SQLConnection.OpenConnection()
+            Dim da As New SqlDataAdapter
+            Dim insert As New SqlCommand("INSERT INTO FacilityPossibility (Text, AssociatedFacility) VALUES (@text, @assocfac);", SQLConnection.RxConnection)
+            da.InsertCommand = insert
+            insert.Parameters.Add("@text", SqlDbType.VarChar)
+            insert.Parameters.Add("@assocfac", SqlDbType.Int)
+            insert.Parameters("@text").Value = AddFacilityPossibility.txtFacPossText.Text
+            insert.Parameters("@assocfac").Value = AddFacilityPossibility.cbAFPFacility.SelectedValue
+            insert.ExecuteNonQuery()
+            SQLConnection.CloseConnection()
+        End If
+    End Sub
+
+    Private Sub AddControlsPossibilityToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddControlsPossibilityToolStripMenuItem.Click
+        AddControlsPossibility.txtControlsPossibility.Clear()
+
+        If AddControlsPossibility.ShowDialog = DialogResult.OK Then
+            SQLConnection.OpenConnection()
+            Dim da As New SqlDataAdapter
+            Dim insert As New SqlCommand("INSERT INTO ControlsPossibility (Text) VALUES (@text);", SQLConnection.RxConnection)
+            da.InsertCommand = insert
+            insert.Parameters.Add("@text", SqlDbType.VarChar)
+            insert.Parameters("@text").Value = AddControlsPossibility.txtControlsPossibility.Text
+            insert.ExecuteNonQuery()
+            SQLConnection.CloseConnection()
+        End If
+    End Sub
+
+    Private Sub AddFacilityToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddFacilityToolStripMenuItem.Click
+        AddFacility.txtFacilityName.Clear()
+
+        If AddFacility.ShowDialog = DialogResult.OK Then
+            SQLConnection.OpenConnection()
+            Dim da As New SqlDataAdapter
+            Dim insert As New SqlCommand("INSERT INTO Facilities (FacilityPossibility) VALUES (@facname);", SQLConnection.RxConnection)
+            da.InsertCommand = insert
+            insert.Parameters.Add("@facname", SqlDbType.VarChar)
+            insert.Parameters("@facname").Value = AddFacility.txtFacilityName.Text
+            insert.ExecuteNonQuery()
+            SQLConnection.CloseConnection()
         End If
     End Sub
 

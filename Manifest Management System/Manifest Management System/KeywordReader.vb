@@ -60,7 +60,7 @@ Public Class KeywordReader
 
         Dim SQL As New RxConnect("gmap-server", "ENCORE", "1776", "ManifestManager", "gmapuser", "Password1")
         Dim da As New SqlDataAdapter
-        Dim slct As New SqlCommand("SELECT Text, AssociatedFacility FROM FacilityPossibility;", SQL.RxConnection)
+        Dim slct As New SqlCommand("SELECT Text, AssociatedFacility FROM FacilityPossibility", SQL.RxConnection)
         da.SelectCommand = slct
         Dim Facilities As New DataSet
         da.Fill(Facilities, "FacilityPossibility")
