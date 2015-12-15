@@ -27,65 +27,8 @@ Public Class MainForm
         If SQLConnection.OpenConnection = True Then
             ProcessingDialog.Show()
             ProcessingDialog.pbrUpdate.Value = 0
-            Dim FileList() As String = Directory.GetFiles(My.Settings.NewManifestLocation, "*.pdf")
-            ProcessingDialog.pbrUpdate.Maximum = FileList.Count
-
-            For Each filepath As String In FileList
-
-                Dim ThisFile As New RxTransaction(SQLConnection.RxConnection, filepath)
-                Dim NewFilePath As String = My.Settings.PermanentManifestLocation & Path.GetFileName(filepath)
-                Dim KeywordParser As New KeywordReader
-                Dim ThisFilesProperties As New Dictionary(Of String, String)
-                ThisFilesProperties = KeywordParser.ParseKeywords(ThisFile.FilePath)
-                If ThisFile.MoveFiles(NewFilePath) = True Then
-
-
-
-                    Try
-                        Dim Facility As String = "20"
-                        Dim Routing As String = "3"
-                        Dim Controls As String = "False"
-                        Dim FillDate As String = "01-01-1900"
-                        Dim Keywords As String = ""
-                        ThisFilesProperties.TryGetValue("Facility", Facility)
-                        ThisFilesProperties.TryGetValue("Routing", Routing)
-                        ThisFilesProperties.TryGetValue("Controls", Controls)
-                        ThisFilesProperties.TryGetValue("FillDate", FillDate)
-                        ThisFilesProperties.TryGetValue("Keywords", Keywords)
-                        If String.IsNullOrEmpty(Controls) = True Then
-                            Controls = "False"
-                        End If
-                        If String.IsNullOrEmpty(FillDate) = True Then
-                            FillDate = "01-01-1900"
-                        End If
-                        If String.IsNullOrEmpty(Facility) = True Then
-                            Facility = "20"
-                        End If
-                        If String.IsNullOrEmpty(Routing) = True Then
-                            Routing = "3"
-                        End If
-                        Try
-                            ThisFile.InsertRecord(CInt(Facility), CBool(Controls), FillDate, False, CInt(Routing), Keywords)
-                        Catch ex As Exception
-                            MsgBox("3  " & ex.Message)
-                        End Try
-
-
-                    Catch ex As Exception
-                        MsgBox("2   " & ex.Message)
-                        ThisFile.LogErrors(ex.Message)
-                    End Try
-
-                End If
-                ThisFile = Nothing
-                ThisFilesProperties = Nothing
-                ProcessingDialog.pbrUpdate.PerformStep()
-            Next
+            BackgroundWorkerRefresh.RunWorkerAsync()
         End If
-        SQLConnection.CloseConnection()
-        RefreshUnverifiedList()
-        ProcessingDialog.Close()
-
     End Sub
 
     Private Sub RefreshDataToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshDataToolStripMenuItem.Click
@@ -526,6 +469,76 @@ Public Class MainForm
             insert.ExecuteNonQuery()
             SQLConnection.CloseConnection()
         End If
+    End Sub
+
+    Private Sub BackgroundWorkerRefresh_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorkerRefresh.DoWork
+
+        Dim FileList() As String = Directory.GetFiles(My.Settings.NewManifestLocation, "*.pdf")
+        Dim totalnumoffiles As Integer = FileList.Count
+        Dim i As Integer = 1
+        For Each filepath As String In FileList
+
+            Dim ThisFile As New RxTransaction(SQLConnection.RxConnection, filepath)
+            Dim NewFilePath As String = My.Settings.PermanentManifestLocation & Path.GetFileName(filepath)
+            Dim KeywordParser As New KeywordReader
+            Dim ThisFilesProperties As New Dictionary(Of String, String)
+            ThisFilesProperties = KeywordParser.ParseKeywords(ThisFile.FilePath)
+            If ThisFile.MoveFiles(NewFilePath) = True Then
+
+
+
+                Try
+                    Dim Facility As String = "20"
+                    Dim Routing As String = "3"
+                    Dim Controls As String = "False"
+                    Dim FillDate As String = "01-01-1900"
+                    Dim Keywords As String = ""
+                    ThisFilesProperties.TryGetValue("Facility", Facility)
+                    ThisFilesProperties.TryGetValue("Routing", Routing)
+                    ThisFilesProperties.TryGetValue("Controls", Controls)
+                    ThisFilesProperties.TryGetValue("FillDate", FillDate)
+                    ThisFilesProperties.TryGetValue("Keywords", Keywords)
+                    If String.IsNullOrEmpty(Controls) = True Then
+                        Controls = "False"
+                    End If
+                    If String.IsNullOrEmpty(FillDate) = True Then
+                        FillDate = "01-01-1900"
+                    End If
+                    If String.IsNullOrEmpty(Facility) = True Then
+                        Facility = "20"
+                    End If
+                    If String.IsNullOrEmpty(Routing) = True Then
+                        Routing = "3"
+                    End If
+                    Try
+                        ThisFile.InsertRecord(CInt(Facility), CBool(Controls), FillDate, False, CInt(Routing), Keywords)
+                    Catch ex As Exception
+                        MsgBox("3  " & ex.Message)
+                    End Try
+
+
+                Catch ex As Exception
+                    MsgBox("2   " & ex.Message)
+                    ThisFile.LogErrors(ex.Message)
+                End Try
+
+            End If
+            ThisFile = Nothing
+            ThisFilesProperties = Nothing
+            BackgroundWorkerRefresh.ReportProgress(CInt((i / totalnumoffiles) * 100))
+            i = i + 1
+        Next
+
+    End Sub
+
+    Private Sub BackgroundWorkerRefresh_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerRefresh.RunWorkerCompleted
+        SQLConnection.CloseConnection()
+        RefreshUnverifiedList()
+        ProcessingDialog.Close()
+    End Sub
+
+    Private Sub BackgroundWorkerRefresh_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorkerRefresh.ProgressChanged
+        ProcessingDialog.pbrUpdate.Value = e.ProgressPercentage
     End Sub
 
 End Class

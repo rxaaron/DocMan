@@ -96,6 +96,7 @@ Partial Class MainForm
         Me.AddFacilityPossibilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddControlsPossibilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddFacilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BackgroundWorkerRefresh = New System.ComponentModel.BackgroundWorker()
         Me.TabControls.SuspendLayout()
         Me.tabVerify.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -816,6 +817,10 @@ Partial Class MainForm
         Me.AddFacilityToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
         Me.AddFacilityToolStripMenuItem.Text = "Add Facility"
         '
+        'BackgroundWorkerRefresh
+        '
+        Me.BackgroundWorkerRefresh.WorkerReportsProgress = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -919,4 +924,5 @@ Partial Class MainForm
     Friend WithEvents AddFacilityPossibilityToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AddControlsPossibilityToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AddFacilityToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BackgroundWorkerRefresh As System.ComponentModel.BackgroundWorker
 End Class
