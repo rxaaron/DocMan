@@ -223,11 +223,15 @@ Public Class RxTransaction
             .Parameters("@filldate").Value = FillDate
             .Parameters("@cycle").Value = Cycle
             .Parameters("@routing").Value = Routing
-            .Parameters("@keywords").Value = KeyWords
             .Parameters("@verified").Value = True
             .Parameters("@verifyinguser").Value = Environment.UserName
             .Parameters("@ID").Value = RowID
         End With
+        If String.IsNullOrEmpty(KeyWords) = True Then
+            update.Parameters("@keywords").Value = DBNull.Value
+        Else
+            update.Parameters("@keywords").Value = KeyWords
+        End If
         da.UpdateCommand = update
 
         Try

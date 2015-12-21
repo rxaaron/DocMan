@@ -109,6 +109,8 @@ Public Class MainForm
         cbVerifyFacility.SelectedValue = CInt(LV.SelectedItems().Item(0).SubItems.Item("FacilityID").Text)
         If Date.Compare(Date.Parse(LV.SelectedItems().Item(0).SubItems.Item("DeliveryDate").Text), Date.Parse("01/01/1900")) = 0 Then
             dtpVerifyDeliveryDate.Value = Today
+        ElseIf Date.Compare(Date.Parse(LV.SelectedItems().Item(0).SubItems.Item("DeliveryDate").Text), Date.Parse("01/01/1900")) = -1 Then
+            dtpVerifyDeliveryDate.Value = Today
         Else
             dtpVerifyDeliveryDate.Value = Date.Parse(LV.SelectedItems().Item(0).SubItems.Item("DeliveryDate").Text)
         End If
@@ -540,5 +542,6 @@ Public Class MainForm
     Private Sub BackgroundWorkerRefresh_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorkerRefresh.ProgressChanged
         ProcessingDialog.pbrUpdate.Value = e.ProgressPercentage
     End Sub
+
 
 End Class
