@@ -154,6 +154,7 @@ Public Class MainForm
 
     Public Sub FillFacilityBox(ByVal FacilityComboBox As ComboBox)
 
+        FacilityComboBox.DataSource = Nothing
         FacilityComboBox.Items.Clear()
         Dim da As New SqlDataAdapter
         Dim slct As New SqlCommand("SELECT ID, FacilityName FROM Facilities ORDER BY FacilityName;", SQLConnection.RxConnection)
