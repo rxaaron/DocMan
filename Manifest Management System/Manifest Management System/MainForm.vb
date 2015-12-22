@@ -409,6 +409,10 @@ Public Class MainForm
                 SQLConnection.CloseConnection()
                 MsgBox("Manifest Deleted.")
                 RefreshUnverifiedList()
+                listUnverified.Items(0).Focused = True
+                listUnverified.Items(0).Selected = True
+                ItemSelected(listUnverified)
+                cbVerifyFacility.Focus()
             End If
 
         End If
@@ -543,5 +547,36 @@ Public Class MainForm
         ProcessingDialog.pbrUpdate.Value = e.ProgressPercentage
     End Sub
 
+    Private Sub MainForm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        If (e.Control = True And e.KeyCode = Keys.D) Then
+
+            If listUnverified.SelectedItems.Count < 1 Then
+                MsgBox("There is no manifest selected.", MsgBoxStyle.Question, "Error")
+            Else
+                Dim dr As MsgBoxResult = MsgBox("Are you sure you want to permanently remove this manifest?", MsgBoxStyle.YesNo, "Are You Sure?")
+                If dr = MsgBoxResult.Yes Then
+                    SQLConnection.OpenConnection()
+
+                    Dim da As New SqlDataAdapter
+                    Dim update As New SqlCommand("UPDATE ManifestData SET Active=@active WHERE ID=@rid;", SQLConnection.RxConnection)
+                    da.UpdateCommand = update
+                    update.Parameters.Add("@active", SqlDbType.Bit)
+                    update.Parameters.Add("@rid", SqlDbType.Int)
+                    update.Parameters("@active").Value = False
+                    update.Parameters("@rid").Value = CInt(listUnverified.SelectedItems.Item(0).SubItems.Item("RowID").Text)
+                    update.ExecuteNonQuery()
+                    SQLConnection.CloseConnection()
+                    MsgBox("Manifest Deleted.")
+                    RefreshUnverifiedList()
+                    listUnverified.Items(0).Focused = True
+                    listUnverified.Items(0).Selected = True
+                    ItemSelected(listUnverified)
+                    cbVerifyFacility.Focus()
+                End If
+
+            End If
+
+        End If
+    End Sub
 
 End Class
