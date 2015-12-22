@@ -580,6 +580,26 @@ Public Class MainForm
             End If
 
         End If
+
+        If (e.Control = True And e.KeyCode = Keys.S) Then
+            SQLConnection.OpenConnection()
+
+            If CInt(cbVerifyRouting.SelectedValue) = 3 Or CInt(cbVerifyFacility.SelectedValue) = 20 Then
+                MsgBox("You cannot verify a manifest as an Unknown Facility or Send/Receive status.", MsgBoxStyle.Exclamation, "Entry Error")
+            Else
+                Dim VerifyManifest As New RxTransaction(SQLConnection.RxConnection, CInt(listUnverified.SelectedItems().Item(0).SubItems.Item("RowID").Text))
+                If VerifyManifest.UpdateRecord(CInt(cbVerifyFacility.SelectedValue), chkVerifyControls.Checked, dtpVerifyDeliveryDate.Value.ToShortDateString, chkVerifyCycle.Checked, CInt(cbVerifyRouting.SelectedValue), rtbVerifyKeywords.Text) = True Then
+                    RefreshUnverifiedList()
+                    VerifyEntryStatus(False)
+                End If
+            End If
+            listUnverified.Items(0).Focused = True
+            listUnverified.Items(0).Selected = True
+            ItemSelected(listUnverified)
+
+            SQLConnection.CloseConnection()
+        End If
+
     End Sub
 
 End Class
