@@ -97,6 +97,7 @@ Partial Class MainForm
         Me.AddControlsPossibilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddFacilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BackgroundWorkerRefresh = New System.ComponentModel.BackgroundWorker()
+        Me.lblunverified = New System.Windows.Forms.Label()
         Me.TabControls.SuspendLayout()
         Me.tabVerify.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -122,6 +123,7 @@ Partial Class MainForm
         'tabVerify
         '
         Me.tabVerify.AutoScroll = True
+        Me.tabVerify.Controls.Add(Me.lblunverified)
         Me.tabVerify.Controls.Add(Me.Panel2)
         Me.tabVerify.Controls.Add(Me.Panel1)
         Me.tabVerify.Controls.Add(Me.VerifyBrowser)
@@ -344,7 +346,7 @@ Partial Class MainForm
         '
         Me.btnRefreshUnverified.Location = New System.Drawing.Point(8, 6)
         Me.btnRefreshUnverified.Name = "btnRefreshUnverified"
-        Me.btnRefreshUnverified.Size = New System.Drawing.Size(241, 23)
+        Me.btnRefreshUnverified.Size = New System.Drawing.Size(196, 23)
         Me.btnRefreshUnverified.TabIndex = 1
         Me.btnRefreshUnverified.Text = "Refresh List"
         Me.btnRefreshUnverified.UseVisualStyleBackColor = True
@@ -821,6 +823,15 @@ Partial Class MainForm
         '
         Me.BackgroundWorkerRefresh.WorkerReportsProgress = True
         '
+        'lblunverified
+        '
+        Me.lblunverified.Location = New System.Drawing.Point(210, 6)
+        Me.lblunverified.Name = "lblunverified"
+        Me.lblunverified.Size = New System.Drawing.Size(39, 23)
+        Me.lblunverified.TabIndex = 6
+        Me.lblunverified.Text = "--"
+        Me.lblunverified.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -926,4 +937,5 @@ Partial Class MainForm
     Friend WithEvents AddControlsPossibilityToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AddFacilityToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents BackgroundWorkerRefresh As System.ComponentModel.BackgroundWorker
+    Friend WithEvents lblunverified As Label
 End Class

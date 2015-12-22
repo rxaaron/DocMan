@@ -53,6 +53,7 @@ Public Class MainForm
         Dim ds As New DataSet
         da.Fill(ds, "ManifestData")
 
+        lblunverified.Text = ds.Tables("ManifestData").Rows.Count.ToString
         listUnverified.Items.Clear()
         listUnverified.View = View.Details
         listUnverified.Columns.Clear()
@@ -468,12 +469,13 @@ Public Class MainForm
         If AddFacility.ShowDialog = DialogResult.OK Then
             SQLConnection.OpenConnection()
             Dim da As New SqlDataAdapter
-            Dim insert As New SqlCommand("INSERT INTO Facilities (FacilityPossibility) VALUES (@facname);", SQLConnection.RxConnection)
+            Dim insert As New SqlCommand("INSERT INTO Facilities (FacilityName) VALUES (@facname);", SQLConnection.RxConnection)
             da.InsertCommand = insert
             insert.Parameters.Add("@facname", SqlDbType.VarChar)
             insert.Parameters("@facname").Value = AddFacility.txtFacilityName.Text
             insert.ExecuteNonQuery()
             SQLConnection.CloseConnection()
+            FillFacilityBox(cbVerifyFacility)
         End If
     End Sub
 
