@@ -199,10 +199,11 @@ Public Class MainForm
                 VerifyEntryStatus(False)
             End If
         End If
-        listUnverified.Items(0).Focused = True
-        listUnverified.Items(0).Selected = True
-        ItemSelected(listUnverified)
-
+        If listUnverified.Items.Count > 0 Then
+            listUnverified.Items(0).Focused = True
+            listUnverified.Items(0).Selected = True
+            ItemSelected(listUnverified)
+        End If
         SQLConnection.CloseConnection()
 
     End Sub
@@ -571,13 +572,15 @@ Public Class MainForm
                     SQLConnection.CloseConnection()
                     MsgBox("Manifest Deleted.")
                     RefreshUnverifiedList()
-                    listUnverified.Items(0).Focused = True
-                    listUnverified.Items(0).Selected = True
-                    ItemSelected(listUnverified)
-                    cbVerifyFacility.Focus()
+                    If listUnverified.Items.Count > 0 Then
+                        listUnverified.Items(0).Focused = True
+                        listUnverified.Items(0).Selected = True
+                        ItemSelected(listUnverified)
+                        cbVerifyFacility.Focus()
+                    End If
                 End If
 
-            End If
+                End If
 
         End If
 
@@ -593,12 +596,13 @@ Public Class MainForm
                     VerifyEntryStatus(False)
                 End If
             End If
-            listUnverified.Items(0).Focused = True
-            listUnverified.Items(0).Selected = True
-            ItemSelected(listUnverified)
-
+            If listUnverified.Items.Count > 0 Then
+                listUnverified.Items(0).Focused = True
+                listUnverified.Items(0).Selected = True
+                ItemSelected(listUnverified)
+            End If
             SQLConnection.CloseConnection()
-        End If
+            End If
 
     End Sub
 
