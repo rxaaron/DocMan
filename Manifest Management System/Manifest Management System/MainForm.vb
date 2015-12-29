@@ -18,12 +18,14 @@ Public Class MainForm
         FillRoutingBox(cbSearchRouting)
 
         VerifyEntryStatus(False)
+        TabControls.SelectedIndex = My.Settings.SelectedTab
 
     End Sub
 
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         My.Settings.StartFormWidth = Me.Width
         My.Settings.StartFormHeight = Me.Height
+        My.Settings.SelectedTab = TabControls.SelectedIndex
     End Sub
 
     Private Sub RefreshNewManifests()
@@ -104,6 +106,12 @@ Public Class MainForm
         Next
 
         VerifyBrowser.Navigate("about:blank")
+
+        Dim itemcount As Integer
+        For itemcount = 0 To listUnverified.Items.Count - 2 Step 2
+            listUnverified.Items(itemcount).BackColor = Color.White
+            listUnverified.Items(itemcount + 1).BackColor = Color.WhiteSmoke
+        Next itemcount
 
     End Sub
 
@@ -308,6 +316,12 @@ Public Class MainForm
 
         EditPanelState(False)
         SearchBrowser.Navigate("about:blank")
+
+        Dim itemcount As Integer
+        For itemcount = 0 To listSearch.Items.Count - 2 Step 2
+            listSearch.Items(itemcount).BackColor = Color.White
+            listSearch.Items(itemcount + 1).BackColor = Color.WhiteSmoke
+        Next itemcount
 
     End Sub
 
@@ -644,7 +658,9 @@ Public Class MainForm
                 update.Parameters("@pdf").Value = DBNull.Value
             End If
         End If
-
+        If SQLConnection.RxConnection.State = ConnectionState.Closed Then
+            SQLConnection.OpenConnection()
+        End If
         Try
             update.ExecuteNonQuery()
         Catch ex As Exception
@@ -678,6 +694,27 @@ Public Class MainForm
     Private Sub BackgroundWorkerOCR_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerOCR.RunWorkerCompleted
         SQLConnection.CloseConnection()
         ProcessingDialog.Close()
+    End Sub
+
+    Private Sub SplitContainer1_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles SplitContainer1.SplitterMoved
+        If listUnverified.Columns.Count > 0 Then
+            listUnverified.Columns.Item(0).Width = listUnverified.Width - 8
+        End If
+
+    End Sub
+
+    Private Sub SplitContainer2_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles SplitContainer2.SplitterMoved
+        If listSearch.Columns.Count > 0 Then
+            listSearch.Columns.Item(0).Width = listSearch.Width - 8
+        End If
+    End Sub
+
+    Private Sub TabControls_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControls.SelectedIndexChanged
+        If TabControls.SelectedIndex = 0 Then
+            SpecialFunctionsToolStripMenuItem.Enabled = True
+        Else
+            SpecialFunctionsToolStripMenuItem.Enabled = False
+        End If
     End Sub
 
 End Class

@@ -25,6 +25,8 @@ Partial Class MainForm
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.TabControls = New System.Windows.Forms.TabControl()
         Me.tabVerify = New System.Windows.Forms.TabPage()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.VerifyBrowser = New System.Windows.Forms.WebBrowser()
         Me.lblunverified = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.txtVerifyFilePath = New System.Windows.Forms.TextBox()
@@ -45,7 +47,6 @@ Partial Class MainForm
         Me.chkVerifyControls = New System.Windows.Forms.CheckBox()
         Me.dtpVerifyDeliveryDate = New System.Windows.Forms.DateTimePicker()
         Me.cbVerifyFacility = New System.Windows.Forms.ComboBox()
-        Me.VerifyBrowser = New System.Windows.Forms.WebBrowser()
         Me.btnRefreshUnverified = New System.Windows.Forms.Button()
         Me.listUnverified = New System.Windows.Forms.ListView()
         Me.tabSearch = New System.Windows.Forms.TabPage()
@@ -100,14 +101,23 @@ Partial Class MainForm
         Me.TextTestToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BackgroundWorkerRefresh = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorkerOCR = New System.ComponentModel.BackgroundWorker()
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.TabControls.SuspendLayout()
         Me.tabVerify.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.tabSearch.SuspendLayout()
         Me.EditPanel.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControls
@@ -125,12 +135,7 @@ Partial Class MainForm
         'tabVerify
         '
         Me.tabVerify.AutoScroll = True
-        Me.tabVerify.Controls.Add(Me.lblunverified)
-        Me.tabVerify.Controls.Add(Me.Panel2)
-        Me.tabVerify.Controls.Add(Me.Panel1)
-        Me.tabVerify.Controls.Add(Me.VerifyBrowser)
-        Me.tabVerify.Controls.Add(Me.btnRefreshUnverified)
-        Me.tabVerify.Controls.Add(Me.listUnverified)
+        Me.tabVerify.Controls.Add(Me.SplitContainer1)
         Me.tabVerify.Location = New System.Drawing.Point(4, 22)
         Me.tabVerify.Name = "tabVerify"
         Me.tabVerify.Padding = New System.Windows.Forms.Padding(3)
@@ -139,17 +144,53 @@ Partial Class MainForm
         Me.tabVerify.Text = "Verify New Manifests"
         Me.tabVerify.UseVisualStyleBackColor = True
         '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.Location = New System.Drawing.Point(3, 3)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.BackColor = System.Drawing.Color.Gainsboro
+        Me.SplitContainer1.Panel1.Controls.Add(Me.btnRefreshUnverified)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblunverified)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.listUnverified)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Panel2)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Panel1)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.VerifyBrowser)
+        Me.SplitContainer1.Size = New System.Drawing.Size(1170, 631)
+        Me.SplitContainer1.SplitterDistance = 298
+        Me.SplitContainer1.TabIndex = 7
+        '
+        'VerifyBrowser
+        '
+        Me.VerifyBrowser.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.VerifyBrowser.Location = New System.Drawing.Point(0, 0)
+        Me.VerifyBrowser.MinimumSize = New System.Drawing.Size(20, 20)
+        Me.VerifyBrowser.Name = "VerifyBrowser"
+        Me.VerifyBrowser.Size = New System.Drawing.Size(868, 631)
+        Me.VerifyBrowser.TabIndex = 2
+        Me.VerifyBrowser.WebBrowserShortcutsEnabled = False
+        '
         'lblunverified
         '
-        Me.lblunverified.Location = New System.Drawing.Point(210, 6)
+        Me.lblunverified.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblunverified.Location = New System.Drawing.Point(260, 3)
         Me.lblunverified.Name = "lblunverified"
-        Me.lblunverified.Size = New System.Drawing.Size(39, 23)
+        Me.lblunverified.Size = New System.Drawing.Size(34, 23)
         Me.lblunverified.TabIndex = 6
-        Me.lblunverified.Text = "--"
+        Me.lblunverified.Text = "----"
         Me.lblunverified.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Panel2
         '
+        Me.Panel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel2.BackColor = System.Drawing.Color.DarkGray
         Me.Panel2.Controls.Add(Me.txtVerifyFilePath)
         Me.Panel2.Controls.Add(Me.Label3)
@@ -158,17 +199,19 @@ Partial Class MainForm
         Me.Panel2.Controls.Add(Me.Label1)
         Me.Panel2.Controls.Add(Me.Label0)
         Me.Panel2.Controls.Add(Me.rtbVerifyKeywords)
-        Me.Panel2.Location = New System.Drawing.Point(8, 502)
+        Me.Panel2.Location = New System.Drawing.Point(5, 499)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(241, 129)
+        Me.Panel2.Size = New System.Drawing.Size(286, 129)
         Me.Panel2.TabIndex = 5
         '
         'txtVerifyFilePath
         '
+        Me.txtVerifyFilePath.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtVerifyFilePath.Location = New System.Drawing.Point(61, 37)
         Me.txtVerifyFilePath.Name = "txtVerifyFilePath"
         Me.txtVerifyFilePath.ReadOnly = True
-        Me.txtVerifyFilePath.Size = New System.Drawing.Size(177, 20)
+        Me.txtVerifyFilePath.Size = New System.Drawing.Size(222, 20)
         Me.txtVerifyFilePath.TabIndex = 7
         Me.txtVerifyFilePath.TabStop = False
         '
@@ -221,16 +264,22 @@ Partial Class MainForm
         '
         'rtbVerifyKeywords
         '
+        Me.rtbVerifyKeywords.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.rtbVerifyKeywords.Location = New System.Drawing.Point(3, 72)
         Me.rtbVerifyKeywords.Name = "rtbVerifyKeywords"
         Me.rtbVerifyKeywords.ReadOnly = True
-        Me.rtbVerifyKeywords.Size = New System.Drawing.Size(235, 50)
+        Me.rtbVerifyKeywords.Size = New System.Drawing.Size(280, 50)
         Me.rtbVerifyKeywords.TabIndex = 0
         Me.rtbVerifyKeywords.TabStop = False
         Me.rtbVerifyKeywords.Text = ""
         '
         'Panel1
         '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.BackColor = System.Drawing.Color.White
         Me.Panel1.Controls.Add(Me.btnVerifySaveManifest)
         Me.Panel1.Controls.Add(Me.Label7)
         Me.Panel1.Controls.Add(Me.Label6)
@@ -241,16 +290,18 @@ Partial Class MainForm
         Me.Panel1.Controls.Add(Me.chkVerifyControls)
         Me.Panel1.Controls.Add(Me.dtpVerifyDeliveryDate)
         Me.Panel1.Controls.Add(Me.cbVerifyFacility)
-        Me.Panel1.Location = New System.Drawing.Point(8, 283)
+        Me.Panel1.Location = New System.Drawing.Point(5, 280)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(241, 213)
+        Me.Panel1.Size = New System.Drawing.Size(289, 213)
         Me.Panel1.TabIndex = 4
         '
         'btnVerifySaveManifest
         '
+        Me.btnVerifySaveManifest.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnVerifySaveManifest.Location = New System.Drawing.Point(3, 152)
         Me.btnVerifySaveManifest.Name = "btnVerifySaveManifest"
-        Me.btnVerifySaveManifest.Size = New System.Drawing.Size(235, 58)
+        Me.btnVerifySaveManifest.Size = New System.Drawing.Size(283, 58)
         Me.btnVerifySaveManifest.TabIndex = 12
         Me.btnVerifySaveManifest.Text = "Save Manifest"
         Me.btnVerifySaveManifest.UseVisualStyleBackColor = True
@@ -294,12 +345,14 @@ Partial Class MainForm
         '
         'cbVerifyRouting
         '
+        Me.cbVerifyRouting.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbVerifyRouting.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
         Me.cbVerifyRouting.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.cbVerifyRouting.FormattingEnabled = True
         Me.cbVerifyRouting.Location = New System.Drawing.Point(96, 120)
         Me.cbVerifyRouting.Name = "cbVerifyRouting"
-        Me.cbVerifyRouting.Size = New System.Drawing.Size(142, 21)
+        Me.cbVerifyRouting.Size = New System.Drawing.Size(190, 21)
         Me.cbVerifyRouting.TabIndex = 5
         '
         'chkVerifyCycle
@@ -324,62 +377,55 @@ Partial Class MainForm
         '
         'dtpVerifyDeliveryDate
         '
+        Me.dtpVerifyDeliveryDate.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtpVerifyDeliveryDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.dtpVerifyDeliveryDate.Location = New System.Drawing.Point(97, 48)
         Me.dtpVerifyDeliveryDate.Name = "dtpVerifyDeliveryDate"
-        Me.dtpVerifyDeliveryDate.Size = New System.Drawing.Size(141, 20)
+        Me.dtpVerifyDeliveryDate.Size = New System.Drawing.Size(189, 20)
         Me.dtpVerifyDeliveryDate.TabIndex = 2
         Me.dtpVerifyDeliveryDate.Value = New Date(1900, 1, 1, 0, 0, 0, 0)
         '
         'cbVerifyFacility
         '
+        Me.cbVerifyFacility.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbVerifyFacility.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
         Me.cbVerifyFacility.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.cbVerifyFacility.FormattingEnabled = True
         Me.cbVerifyFacility.Location = New System.Drawing.Point(55, 21)
         Me.cbVerifyFacility.Name = "cbVerifyFacility"
-        Me.cbVerifyFacility.Size = New System.Drawing.Size(183, 21)
+        Me.cbVerifyFacility.Size = New System.Drawing.Size(231, 21)
         Me.cbVerifyFacility.TabIndex = 1
-        '
-        'VerifyBrowser
-        '
-        Me.VerifyBrowser.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.VerifyBrowser.Location = New System.Drawing.Point(255, 6)
-        Me.VerifyBrowser.MinimumSize = New System.Drawing.Size(20, 20)
-        Me.VerifyBrowser.Name = "VerifyBrowser"
-        Me.VerifyBrowser.Size = New System.Drawing.Size(913, 623)
-        Me.VerifyBrowser.TabIndex = 2
-        Me.VerifyBrowser.WebBrowserShortcutsEnabled = False
         '
         'btnRefreshUnverified
         '
-        Me.btnRefreshUnverified.Location = New System.Drawing.Point(8, 6)
+        Me.btnRefreshUnverified.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnRefreshUnverified.Location = New System.Drawing.Point(5, 3)
         Me.btnRefreshUnverified.Name = "btnRefreshUnverified"
-        Me.btnRefreshUnverified.Size = New System.Drawing.Size(196, 23)
+        Me.btnRefreshUnverified.Size = New System.Drawing.Size(249, 23)
         Me.btnRefreshUnverified.TabIndex = 1
         Me.btnRefreshUnverified.Text = "Refresh List"
         Me.btnRefreshUnverified.UseVisualStyleBackColor = True
         '
         'listUnverified
         '
+        Me.listUnverified.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.listUnverified.HideSelection = False
-        Me.listUnverified.Location = New System.Drawing.Point(8, 35)
+        Me.listUnverified.Location = New System.Drawing.Point(5, 32)
         Me.listUnverified.MultiSelect = False
         Me.listUnverified.Name = "listUnverified"
-        Me.listUnverified.Size = New System.Drawing.Size(241, 242)
+        Me.listUnverified.Size = New System.Drawing.Size(289, 242)
         Me.listUnverified.TabIndex = 0
         Me.listUnverified.UseCompatibleStateImageBehavior = False
         Me.listUnverified.View = System.Windows.Forms.View.Details
         '
         'tabSearch
         '
-        Me.tabSearch.Controls.Add(Me.Label19)
+        Me.tabSearch.Controls.Add(Me.SplitContainer2)
         Me.tabSearch.Controls.Add(Me.EditPanel)
-        Me.tabSearch.Controls.Add(Me.SearchBrowser)
-        Me.tabSearch.Controls.Add(Me.listSearch)
-        Me.tabSearch.Controls.Add(Me.Panel3)
         Me.tabSearch.Location = New System.Drawing.Point(4, 22)
         Me.tabSearch.Name = "tabSearch"
         Me.tabSearch.Padding = New System.Windows.Forms.Padding(3)
@@ -391,7 +437,7 @@ Partial Class MainForm
         'Label19
         '
         Me.Label19.AutoSize = True
-        Me.Label19.Location = New System.Drawing.Point(11, 240)
+        Me.Label19.Location = New System.Drawing.Point(8, 223)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(197, 13)
         Me.Label19.TabIndex = 4
@@ -613,29 +659,31 @@ Partial Class MainForm
         '
         'SearchBrowser
         '
-        Me.SearchBrowser.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SearchBrowser.Location = New System.Drawing.Point(224, 3)
+        Me.SearchBrowser.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SearchBrowser.Location = New System.Drawing.Point(0, 0)
         Me.SearchBrowser.MinimumSize = New System.Drawing.Size(20, 20)
         Me.SearchBrowser.Name = "SearchBrowser"
-        Me.SearchBrowser.Size = New System.Drawing.Size(732, 626)
+        Me.SearchBrowser.Size = New System.Drawing.Size(671, 634)
         Me.SearchBrowser.TabIndex = 2
         '
         'listSearch
         '
-        Me.listSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.listSearch.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.listSearch.HideSelection = False
-        Me.listSearch.Location = New System.Drawing.Point(8, 256)
+        Me.listSearch.Location = New System.Drawing.Point(6, 240)
         Me.listSearch.MultiSelect = False
         Me.listSearch.Name = "listSearch"
-        Me.listSearch.Size = New System.Drawing.Size(210, 373)
+        Me.listSearch.Size = New System.Drawing.Size(275, 391)
         Me.listSearch.TabIndex = 1
         Me.listSearch.UseCompatibleStateImageBehavior = False
         '
         'Panel3
         '
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.BackColor = System.Drawing.Color.White
         Me.Panel3.Controls.Add(Me.btnSearch)
         Me.Panel3.Controls.Add(Me.dtpSearchTo)
         Me.Panel3.Controls.Add(Me.Label11)
@@ -645,33 +693,37 @@ Partial Class MainForm
         Me.Panel3.Controls.Add(Me.Label9)
         Me.Panel3.Controls.Add(Me.Label8)
         Me.Panel3.Controls.Add(Me.cbSearchFacility)
-        Me.Panel3.Location = New System.Drawing.Point(8, 6)
+        Me.Panel3.Location = New System.Drawing.Point(6, 5)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(210, 231)
+        Me.Panel3.Size = New System.Drawing.Size(275, 212)
         Me.Panel3.TabIndex = 0
         '
         'btnSearch
         '
-        Me.btnSearch.Location = New System.Drawing.Point(3, 190)
+        Me.btnSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSearch.Location = New System.Drawing.Point(3, 167)
         Me.btnSearch.Name = "btnSearch"
-        Me.btnSearch.Size = New System.Drawing.Size(204, 38)
+        Me.btnSearch.Size = New System.Drawing.Size(269, 38)
         Me.btnSearch.TabIndex = 8
         Me.btnSearch.Text = "Search Manifests"
         Me.btnSearch.UseVisualStyleBackColor = True
         '
         'dtpSearchTo
         '
+        Me.dtpSearchTo.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtpSearchTo.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtpSearchTo.Location = New System.Drawing.Point(7, 149)
+        Me.dtpSearchTo.Location = New System.Drawing.Point(7, 140)
         Me.dtpSearchTo.Name = "dtpSearchTo"
-        Me.dtpSearchTo.Size = New System.Drawing.Size(200, 20)
+        Me.dtpSearchTo.Size = New System.Drawing.Size(265, 20)
         Me.dtpSearchTo.TabIndex = 7
         '
         'Label11
         '
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(3, 129)
+        Me.Label11.Location = New System.Drawing.Point(3, 120)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(27, 17)
         Me.Label11.TabIndex = 6
@@ -681,7 +733,7 @@ Partial Class MainForm
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(4, 86)
+        Me.Label10.Location = New System.Drawing.Point(4, 77)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(44, 17)
         Me.Label10.TabIndex = 5
@@ -689,10 +741,12 @@ Partial Class MainForm
         '
         'dtpSearchFrom
         '
+        Me.dtpSearchFrom.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtpSearchFrom.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtpSearchFrom.Location = New System.Drawing.Point(7, 106)
+        Me.dtpSearchFrom.Location = New System.Drawing.Point(7, 97)
         Me.dtpSearchFrom.Name = "dtpSearchFrom"
-        Me.dtpSearchFrom.Size = New System.Drawing.Size(200, 20)
+        Me.dtpSearchFrom.Size = New System.Drawing.Size(265, 20)
         Me.dtpSearchFrom.TabIndex = 4
         '
         'chkAllFacilities
@@ -726,10 +780,12 @@ Partial Class MainForm
         '
         'cbSearchFacility
         '
+        Me.cbSearchFacility.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbSearchFacility.FormattingEnabled = True
         Me.cbSearchFacility.Location = New System.Drawing.Point(90, 3)
         Me.cbSearchFacility.Name = "cbSearchFacility"
-        Me.cbSearchFacility.Size = New System.Drawing.Size(117, 21)
+        Me.cbSearchFacility.Size = New System.Drawing.Size(182, 21)
         Me.cbSearchFacility.TabIndex = 0
         '
         'MenuStrip1
@@ -834,7 +890,7 @@ Partial Class MainForm
         '
         Me.TextTestToolStripMenuItem.Name = "TextTestToolStripMenuItem"
         Me.TextTestToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
-        Me.TextTestToolStripMenuItem.Text = "Text Test"
+        Me.TextTestToolStripMenuItem.Text = "OCR Text"
         '
         'BackgroundWorkerRefresh
         '
@@ -843,6 +899,28 @@ Partial Class MainForm
         'BackgroundWorkerOCR
         '
         Me.BackgroundWorkerOCR.WorkerReportsProgress = True
+        '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.BackColor = System.Drawing.Color.Gainsboro
+        Me.SplitContainer2.Panel1.Controls.Add(Me.listSearch)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.Label19)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.Panel3)
+        '
+        'SplitContainer2.Panel2
+        '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.SearchBrowser)
+        Me.SplitContainer2.Size = New System.Drawing.Size(959, 634)
+        Me.SplitContainer2.SplitterDistance = 284
+        Me.SplitContainer2.TabIndex = 5
         '
         'MainForm
         '
@@ -858,18 +936,26 @@ Partial Class MainForm
         Me.Text = "Manifest Manager"
         Me.TabControls.ResumeLayout(False)
         Me.tabVerify.ResumeLayout(False)
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.tabSearch.ResumeLayout(False)
-        Me.tabSearch.PerformLayout()
         Me.EditPanel.ResumeLayout(False)
         Me.EditPanel.PerformLayout()
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.PerformLayout()
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -952,4 +1038,6 @@ Partial Class MainForm
     Friend WithEvents lblunverified As Label
     Friend WithEvents TextTestToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents BackgroundWorkerOCR As System.ComponentModel.BackgroundWorker
+    Friend WithEvents SplitContainer1 As SplitContainer
+    Friend WithEvents SplitContainer2 As SplitContainer
 End Class
