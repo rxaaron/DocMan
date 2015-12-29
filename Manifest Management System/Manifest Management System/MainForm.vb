@@ -1,5 +1,8 @@
 ﻿Imports System.IO
 Imports System.Data.SqlClient
+Imports Clock.Pdf
+Imports Clock.Utils
+
 Public Class MainForm
     Dim SQLConnection As New RxConnect(My.Settings.SQLServer, My.Settings.SQLInstance, My.Settings.SQLPort, My.Settings.DatabaseName, My.Settings.DatabaseUser, My.Settings.DatabasePassword)
 
@@ -580,7 +583,7 @@ Public Class MainForm
                     End If
                 End If
 
-                End If
+            End If
 
         End If
 
@@ -602,8 +605,79 @@ Public Class MainForm
                 ItemSelected(listUnverified)
             End If
             SQLConnection.CloseConnection()
-            End If
+        End If
 
+    End Sub
+
+    Private Sub TextTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextTestToolStripMenuItem.Click
+
+        If SQLConnection.OpenConnection = True Then
+            ProcessingDialog.Show()
+            ProcessingDialog.pbrUpdate.Value = 0
+            BackgroundWorkerOCR.RunWorkerAsync()
+        End If
+
+    End Sub
+
+    Private Sub SaveText(ByVal FilePath As String, ByVal IDentifier As Integer)
+
+        Dim da As New SqlDataAdapter
+        Dim update As New SqlCommand("UPDATE ManifestData SET OCRText = @pdf WHERE ID = @fid;", SQLConnection.RxConnection)
+        da.UpdateCommand = update
+        update.Parameters.Add("@fid", SqlDbType.Int)
+        update.Parameters.Add("@pdf", SqlDbType.Text)
+        update.Parameters("@fid").Value = IDentifier
+        Dim bob As New KeywordReader
+
+        Dim PDFText As String = bob.ReadPDFText(FilePath)
+        If String.IsNullOrEmpty(PDFText) = False Then
+            update.Parameters("@pdf").Value = PDFText
+        Else
+            Dim doc As New PDFDoc
+            doc = PDFDoc.Open(FilePath)
+            doc.Ocr(OcrMode.Tesseract, "eng", WriteTextMode.Word, Nothing)
+            doc.Save()
+            PDFText = bob.ReadPDFText(FilePath)
+            If String.IsNullOrEmpty(PDFText) = False Then
+                update.Parameters("@pdf").Value = PDFText
+            Else
+                update.Parameters("@pdf").Value = DBNull.Value
+            End If
+        End If
+
+        Try
+            update.ExecuteNonQuery()
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+    End Sub
+
+    Private Sub BackgroundWorkerOCR_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorkerOCR.DoWork
+
+        Dim das As New SqlDataAdapter
+        Dim slct As New SqlCommand("SELECT ID, FileLocation FROM ManifestData WHERE Active = 1 AND OCRText IS NULL", SQLConnection.RxConnection)
+        das.SelectCommand = slct
+        Dim ds As New DataSet
+        das.Fill(ds, "ManifestData")
+        Dim i As Integer = 1
+        Dim totalnum As Integer = ds.Tables("ManifestData").Rows.Count
+        For Each dr As DataRow In ds.Tables("ManifestData").Rows
+            SaveText(dr.Item("FileLocation").ToString, CInt(dr.Item("ID")))
+            BackgroundWorkerOCR.ReportProgress(CInt((i / totalnum) * 100))
+            i = i + 1
+        Next
+
+
+    End Sub
+
+    Private Sub BackgroundWorkerOCR_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorkerOCR.ProgressChanged
+        ProcessingDialog.pbrUpdate.Value = e.ProgressPercentage
+    End Sub
+
+    Private Sub BackgroundWorkerOCR_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerOCR.RunWorkerCompleted
+        SQLConnection.CloseConnection()
+        ProcessingDialog.Close()
     End Sub
 
 End Class

@@ -25,6 +25,7 @@ Partial Class MainForm
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.TabControls = New System.Windows.Forms.TabControl()
         Me.tabVerify = New System.Windows.Forms.TabPage()
+        Me.lblunverified = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.txtVerifyFilePath = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -96,8 +97,9 @@ Partial Class MainForm
         Me.AddFacilityPossibilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddControlsPossibilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddFacilityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TextTestToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BackgroundWorkerRefresh = New System.ComponentModel.BackgroundWorker()
-        Me.lblunverified = New System.Windows.Forms.Label()
+        Me.BackgroundWorkerOCR = New System.ComponentModel.BackgroundWorker()
         Me.TabControls.SuspendLayout()
         Me.tabVerify.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -136,6 +138,15 @@ Partial Class MainForm
         Me.tabVerify.TabIndex = 0
         Me.tabVerify.Text = "Verify New Manifests"
         Me.tabVerify.UseVisualStyleBackColor = True
+        '
+        'lblunverified
+        '
+        Me.lblunverified.Location = New System.Drawing.Point(210, 6)
+        Me.lblunverified.Name = "lblunverified"
+        Me.lblunverified.Size = New System.Drawing.Size(39, 23)
+        Me.lblunverified.TabIndex = 6
+        Me.lblunverified.Text = "--"
+        Me.lblunverified.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Panel2
         '
@@ -795,7 +806,7 @@ Partial Class MainForm
         '
         'DatabaseManagementToolStripMenuItem
         '
-        Me.DatabaseManagementToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddFacilityPossibilityToolStripMenuItem, Me.AddControlsPossibilityToolStripMenuItem, Me.AddFacilityToolStripMenuItem})
+        Me.DatabaseManagementToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddFacilityPossibilityToolStripMenuItem, Me.AddControlsPossibilityToolStripMenuItem, Me.AddFacilityToolStripMenuItem, Me.TextTestToolStripMenuItem})
         Me.DatabaseManagementToolStripMenuItem.Enabled = False
         Me.DatabaseManagementToolStripMenuItem.Name = "DatabaseManagementToolStripMenuItem"
         Me.DatabaseManagementToolStripMenuItem.Size = New System.Drawing.Size(141, 20)
@@ -819,18 +830,19 @@ Partial Class MainForm
         Me.AddFacilityToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
         Me.AddFacilityToolStripMenuItem.Text = "Add Facility"
         '
+        'TextTestToolStripMenuItem
+        '
+        Me.TextTestToolStripMenuItem.Name = "TextTestToolStripMenuItem"
+        Me.TextTestToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.TextTestToolStripMenuItem.Text = "Text Test"
+        '
         'BackgroundWorkerRefresh
         '
         Me.BackgroundWorkerRefresh.WorkerReportsProgress = True
         '
-        'lblunverified
+        'BackgroundWorkerOCR
         '
-        Me.lblunverified.Location = New System.Drawing.Point(210, 6)
-        Me.lblunverified.Name = "lblunverified"
-        Me.lblunverified.Size = New System.Drawing.Size(39, 23)
-        Me.lblunverified.TabIndex = 6
-        Me.lblunverified.Text = "--"
-        Me.lblunverified.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.BackgroundWorkerOCR.WorkerReportsProgress = True
         '
         'MainForm
         '
@@ -938,4 +950,6 @@ Partial Class MainForm
     Friend WithEvents AddFacilityToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents BackgroundWorkerRefresh As System.ComponentModel.BackgroundWorker
     Friend WithEvents lblunverified As Label
+    Friend WithEvents TextTestToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BackgroundWorkerOCR As System.ComponentModel.BackgroundWorker
 End Class

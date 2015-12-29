@@ -1,6 +1,7 @@
 ﻿Imports iTextSharp.text.pdf
 Imports System.Data.SqlClient
 Imports System.IO
+Imports System.Text
 
 ''' <summary>
 ''' Wrapper for iTextSharp and keyword parsing methods
@@ -48,11 +49,12 @@ Public Class KeywordReader
     Private Function GetKeywords(ByVal FileLocation As String) As String
         Dim KeyWords As String = vbNullString
 
-        Dim reader As New PdfReader(FileLocation)
-        Dim index As Boolean = reader.Info.TryGetValue("Keywords", KeyWords)
+        Using reader As New PdfReader(FileLocation)
+            Dim index As Boolean = reader.Info.TryGetValue("Keywords", KeyWords)
 
-        reader.Close()
-        Return KeyWords
+            reader.Close()
+            Return KeyWords
+        End Using
     End Function
 
     Private Function FindFacility(ByVal Word As String) As String
@@ -105,6 +107,19 @@ Public Class KeywordReader
 
         SQL.CloseConnection()
         Return IsControls
+    End Function
+
+    Public Function ReadPDFText(ByVal FileLocation As String) As String
+        Dim PDFText As String = ""
+        Using reader As New PdfReader(FileLocation)
+            Dim page As Integer = 1
+            While page <= reader.NumberOfPages
+                Dim currentText As String = parser.PdfTextExtractor.GetTextFromPage(reader, page)
+                PDFText = PDFText & currentText
+                page = page + 1
+            End While
+        End Using
+        Return PDFText
     End Function
 
 End Class
