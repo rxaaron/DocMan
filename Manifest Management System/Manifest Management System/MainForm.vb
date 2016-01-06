@@ -5,6 +5,8 @@ Imports Clock.Utils
 
 Public Class MainForm
     Dim SQLConnection As New RxConnect(My.Settings.SQLServer, My.Settings.SQLInstance, My.Settings.SQLPort, My.Settings.DatabaseName, My.Settings.DatabaseUser, My.Settings.DatabasePassword)
+    Dim OCRConnection As New RxConnect(My.Settings.SQLServer, My.Settings.SQLInstance, My.Settings.SQLPort, My.Settings.DatabaseName, My.Settings.DatabaseUser, My.Settings.DatabasePassword)
+    Dim NewManifestConnection As New RxConnect(My.Settings.SQLServer, My.Settings.SQLInstance, My.Settings.SQLPort, My.Settings.DatabaseName, My.Settings.DatabaseUser, My.Settings.DatabasePassword)
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Width = My.Settings.StartFormWidth
@@ -29,7 +31,7 @@ Public Class MainForm
     End Sub
 
     Private Sub RefreshNewManifests()
-        If SQLConnection.OpenConnection = True Then
+        If NewManifestConnection.OpenConnection = True Then
             ProcessingDialog.Show()
             ProcessingDialog.pbrUpdate.Value = 0
             BackgroundWorkerRefresh.RunWorkerAsync()
@@ -505,7 +507,7 @@ Public Class MainForm
         Dim i As Integer = 1
         For Each filepath As String In FileList
 
-            Dim ThisFile As New RxTransaction(SQLConnection.RxConnection, filepath)
+            Dim ThisFile As New RxTransaction(NewManifestConnection.RxConnection, filepath)
             Dim NewFilePath As String = My.Settings.PermanentManifestLocation & Path.GetFileName(filepath)
             Dim KeywordParser As New KeywordReader
             Dim ThisFilesProperties As New Dictionary(Of String, String)
@@ -559,7 +561,7 @@ Public Class MainForm
     End Sub
 
     Private Sub BackgroundWorkerRefresh_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerRefresh.RunWorkerCompleted
-        SQLConnection.CloseConnection()
+        NewManifestConnection.CloseConnection()
         RefreshUnverifiedList()
         ProcessingDialog.Close()
     End Sub
@@ -625,7 +627,7 @@ Public Class MainForm
 
     Private Sub TextTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextTestToolStripMenuItem.Click
 
-        If SQLConnection.OpenConnection = True Then
+        If OCRConnection.OpenConnection = True Then
             ProcessingDialog.Show()
             ProcessingDialog.pbrUpdate.Value = 0
             BackgroundWorkerOCR.RunWorkerAsync()
@@ -636,7 +638,7 @@ Public Class MainForm
     Private Sub SaveText(ByVal FilePath As String, ByVal IDentifier As Integer)
 
         Dim da As New SqlDataAdapter
-        Dim update As New SqlCommand("UPDATE ManifestData SET OCRText = @pdf WHERE ID = @fid;", SQLConnection.RxConnection)
+        Dim update As New SqlCommand("UPDATE ManifestData SET OCRText = @pdf WHERE ID = @fid;", OCRConnection.RxConnection)
         da.UpdateCommand = update
         update.Parameters.Add("@fid", SqlDbType.Int)
         update.Parameters.Add("@pdf", SqlDbType.Text)
@@ -658,8 +660,8 @@ Public Class MainForm
                 update.Parameters("@pdf").Value = DBNull.Value
             End If
         End If
-        If SQLConnection.RxConnection.State = ConnectionState.Closed Then
-            SQLConnection.OpenConnection()
+        If OCRConnection.RxConnection.State = ConnectionState.Closed Then
+            OCRConnection.OpenConnection()
         End If
         Try
             update.ExecuteNonQuery()
@@ -672,7 +674,7 @@ Public Class MainForm
     Private Sub BackgroundWorkerOCR_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorkerOCR.DoWork
 
         Dim das As New SqlDataAdapter
-        Dim slct As New SqlCommand("SELECT ID, FileLocation FROM ManifestData WHERE Active = 1 AND OCRText IS NULL", SQLConnection.RxConnection)
+        Dim slct As New SqlCommand("SELECT ID, FileLocation FROM ManifestData WHERE Active = 1 AND OCRText IS NULL", OCRConnection.RxConnection)
         das.SelectCommand = slct
         Dim ds As New DataSet
         das.Fill(ds, "ManifestData")
@@ -692,7 +694,7 @@ Public Class MainForm
     End Sub
 
     Private Sub BackgroundWorkerOCR_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerOCR.RunWorkerCompleted
-        SQLConnection.CloseConnection()
+        OCRConnection.CloseConnection()
         ProcessingDialog.Close()
     End Sub
 
