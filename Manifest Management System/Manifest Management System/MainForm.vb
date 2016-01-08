@@ -14,7 +14,7 @@ Public Class MainForm
 
         FillRoutingBox(cbVerifyRouting)
         FillFacilityBox(cbVerifyFacility)
-        FillFacilityBox(cbSearchFacility)
+        FillFacilityBox(cbSearchFacility, True)
         FillFacilityBox(cbSearchResultFacility)
         FillFacilityBox(AddFacilityPossibility.cbAFPFacility)
         FillRoutingBox(cbSearchRouting)
@@ -165,7 +165,7 @@ Public Class MainForm
         Return True
     End Function
 
-    Public Sub FillFacilityBox(ByVal FacilityComboBox As ComboBox)
+    Public Sub FillFacilityBox(ByVal FacilityComboBox As ComboBox, Optional ByVal AllListing As Boolean = False)
 
         FacilityComboBox.DataSource = Nothing
         FacilityComboBox.Items.Clear()
@@ -174,6 +174,12 @@ Public Class MainForm
         da.SelectCommand = slct
         Dim ds As New DataSet
         da.Fill(ds, "Facilities")
+        If AllListing = True Then
+            Dim dr As DataRow = ds.Tables("Facilities").NewRow
+            dr("ID") = 999
+            dr("FacilityName") = "---All Facilities---"
+            ds.Tables("Facilities").Rows.InsertAt(dr, 0)
+        End If
         Dim dv As DataView
         dv = ds.Tables("Facilities").DefaultView
         FacilityComboBox.DataSource = dv
@@ -232,14 +238,15 @@ Public Class MainForm
 
         Dim commandText As String
 
-        If chkAllFacilities.Checked = True Then
-            commandText = "SELECT A.ID, A.FileLocation, B.ID AS FacilityID, B.FacilityName, A.Controls, A.DeliveryDate, A.Cycle, C.ID AS RoutingID," _
-                                & " C.Text AS RoutingText, A.AssociatedKeywords, A.Verified, A.VerifyingUser FROM ManifestData AS A INNER JOIN Facilities AS B ON A.Facility = B.ID " _
-                                & "INNER JOIN Routing AS C ON A.Routing = C.ID WHERE A.Active = @active AND A.DeliveryDate BETWEEN @fromdate AND @todate ORDER BY B.FacilityName, A.DeliveryDate;"
-        Else
-            commandText = "SELECT A.ID, A.FileLocation, B.ID AS FacilityID, B.FacilityName, A.Controls, A.DeliveryDate, A.Cycle, C.ID AS RoutingID," _
-                                & " C.Text AS RoutingText, A.AssociatedKeywords, A.Verified, A.VerifyingUser FROM ManifestData AS A INNER JOIN Facilities AS B ON A.Facility = B.ID " _
-                                & "INNER JOIN Routing AS C ON A.Routing = C.ID WHERE A.Active = @active AND A.DeliveryDate BETWEEN @fromdate AND @todate AND A.Facility = @facility ORDER BY A.DeliveryDate;"
+        If CInt(cbSearchFacility.SelectedValue) = 999 And String.IsNullOrEmpty(txtFullTextSearch.Text) = True Then
+            commandText = "SELECT A.ID, A.FileLocation, B.ID AS FacilityID, B.FacilityName, A.Controls, A.DeliveryDate, A.Cycle, C.ID AS RoutingID, C.Text AS RoutingText, A.AssociatedKeywords, A.Verified, A.VerifyingUser FROM ManifestData AS A INNER JOIN Facilities AS B ON A.Facility = B.ID INNER JOIN Routing AS C ON A.Routing = C.ID WHERE A.Active = @active AND A.DeliveryDate BETWEEN @fromdate AND @todate ORDER BY B.FacilityName, A.DeliveryDate;"
+        ElseIf CInt(cbSearchFacility.SelectedValue) <> 999 And String.IsNullOrEmpty(txtFullTextSearch.Text) = True Then
+            commandText = "SELECT A.ID, A.FileLocation, B.ID AS FacilityID, B.FacilityName, A.Controls, A.DeliveryDate, A.Cycle, C.ID AS RoutingID, C.Text AS RoutingText, A.AssociatedKeywords, A.Verified, A.VerifyingUser FROM ManifestData AS A INNER JOIN Facilities AS B ON A.Facility = B.ID INNER JOIN Routing AS C ON A.Routing = C.ID WHERE A.Active = @active AND A.DeliveryDate BETWEEN @fromdate AND @todate AND A.Facility = @facility ORDER BY A.DeliveryDate;"
+        ElseIf CInt(cbSearchFacility.SelectedValue) = 999 And String.IsNullOrEmpty(txtFullTextSearch.Text) = False Then
+            commandText = "SELECT A.ID, A.FileLocation, B.ID AS FacilityID, B.FacilityName, A.Controls, A.DeliveryDate, A.Cycle, C.ID AS RoutingID, C.Text AS RoutingText, A.AssociatedKeywords, A.Verified, A.VerifyingUser FROM ManifestData AS A INNER JOIN Facilities AS B ON A.Facility = B.ID INNER JOIN Routing AS C ON A.Routing = C.ID WHERE A.Active = @active AND A.DeliveryDate BETWEEN @fromdate AND @todate AND CONTAINS(A.OCRText, @ocr) ORDER BY B.FacilityName, A.DeliveryDate;"
+        ElseIf CInt(cbSearchFacility.SelectedValue) <> 999 And String.IsNullOrEmpty(txtFullTextSearch.Text) = False Then
+            commandText = "SELECT A.ID, A.FileLocation, B.ID AS FacilityID, B.FacilityName, A.Controls, A.DeliveryDate, A.Cycle, C.ID AS RoutingID, C.Text AS RoutingText, A.AssociatedKeywords, A.Verified, A.VerifyingUser FROM ManifestData AS A INNER JOIN Facilities AS B ON A.Facility = B.ID INNER JOIN Routing AS C ON A.Routing = C.ID WHERE A.Active = @active AND A.DeliveryDate BETWEEN @fromdate AND @todate AND A.Facility = @facility  AND CONTAINS(A.OCRText, @ocr) ORDER BY A.DeliveryDate;"
+
         End If
 
         Dim da As New SqlDataAdapter
@@ -251,9 +258,25 @@ Public Class MainForm
         slct.Parameters("@todate").Value = dtpSearchTo.Value
         slct.Parameters("@active").Value = True
 
-        If chkAllFacilities.Checked = False Then
+        If CInt(cbSearchFacility.SelectedValue) <> 999 Then
             slct.Parameters.Add("@facility", SqlDbType.Int)
             slct.Parameters("@facility").Value = CInt(cbSearchFacility.SelectedValue)
+        End If
+
+        If String.IsNullOrEmpty(txtFullTextSearch.Text) = False Then
+            slct.Parameters.Add("@ocr", SqlDbType.VarChar)
+            Dim SearchTerms() As String = txtFullTextSearch.Text.Split(" "c)
+            Dim fullsearch As String = ""
+            Dim i As Integer = 1
+            For Each str As String In SearchTerms
+                If i = 1 Then
+                    fullsearch = Chr(34) & str & "*" & Chr(34)
+                Else
+                    fullsearch = fullsearch & " AND " & Chr(34) & str & "*" & Chr(34)
+                End If
+                i = i + 1
+            Next
+            slct.Parameters("@ocr").Value = fullsearch
         End If
 
         da.SelectCommand = slct
@@ -680,12 +703,13 @@ Public Class MainForm
         das.Fill(ds, "ManifestData")
         Dim i As Integer = 1
         Dim totalnum As Integer = ds.Tables("ManifestData").Rows.Count
-        For Each dr As DataRow In ds.Tables("ManifestData").Rows
-            SaveText(dr.Item("FileLocation").ToString, CInt(dr.Item("ID")))
-            BackgroundWorkerOCR.ReportProgress(CInt((i / totalnum) * 100))
-            i = i + 1
-        Next
-
+        If totalnum > 0 Then
+            For Each dr As DataRow In ds.Tables("ManifestData").Rows
+                SaveText(dr.Item("FileLocation").ToString, CInt(dr.Item("ID")))
+                BackgroundWorkerOCR.ReportProgress(CInt((i / totalnum) * 100))
+                i = i + 1
+            Next
+        End If
 
     End Sub
 
